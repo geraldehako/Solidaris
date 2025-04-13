@@ -1,0 +1,112 @@
+{% extends 'frontoffice/base front.html' %}
+
+{% block content %}
+<div class="az-content az-content-profile">
+    <div class="container mn-ht-100p">
+        <div class="az-content-left az-content-left-profile">
+            <div class="az-profile-overview">
+                <div class="az-img-user">
+                    <img src="{{ prise_en_charge.mutualiste.photo.url }}" alt="Photo du mutualiste">
+                </div>
+                <div class="d-flex justify-content-between mg-b-20">
+                    <div>
+                        <h5 class="az-profile-name">{{ prise_en_charge.mutualiste.nom }} {{ prise_en_charge.mutualiste.prenom }}</h5>
+                        <p class="az-profile-name-text">{{ prise_en_charge.mutualiste.age }} Ans</p>
+                    </div>
+                </div>
+                <div class="az-profile-bio">
+                    <p><strong>Date de prise en charge :</strong> {{ prise_en_charge.date_prise_en_charge }}</p>
+                    <p><strong>Durée de validité :</strong> {{ prise_en_charge.duree_validite }}</p>
+                </div>
+                <hr class="mg-y-30">
+                <div class="az-content-label mg-b-10">Statistiques des Prestations</div>
+                <div class="az-profile-social-list">
+                    <ul class="list-group wd-md-100p">
+                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="media-icon mg-r-15" style="color: #072C84;">
+                                    <i class="fas fa-file-medical"></i>
+                                </div>
+                                <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">Total des Prestations</h6>
+                            </div>
+                            <span class="d-block tx-11 text-muted text-right" style="color: #072C84;">
+                                {{ prise_en_charge.mutualiste.statistiques_prestations.total_prestations }}
+                            </span>
+                        </li>
+
+                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="media-icon mg-r-15" style="color: #072C84;">
+                                    <i class="fas fa-dollar-sign"></i>
+                                </div>
+                                <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">Montant Total</h6>
+                            </div>
+                            <span class="d-block tx-11 text-muted text-right" style="color: #072C84;">
+                                {{ prise_en_charge.mutualiste.statistiques_prestations.montant_total }}
+                            </span>
+                        </li>
+
+                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="media-icon mg-r-15" style="color: #072C84;">
+                                    <i class="fas fa-hand-holding-usd"></i>
+                                </div>
+                                <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">Part Mutuelle</h6>
+                            </div>
+                            <span class="d-block tx-11 text-muted text-right" style="color: #072C84;">
+                                {{ prise_en_charge.mutualiste.statistiques_prestations.part_mutuelle }}
+                            </span>
+                        </li>
+
+                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="media-icon mg-r-15" style="color: #072C84;">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">Part Mutualiste</h6>
+                            </div>
+                            <span class="d-block tx-11 text-muted text-right" style="color: #072C84;">
+                                {{ prise_en_charge.mutualiste.statistiques_prestations.part_mutualiste }}
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+        <div class="az-content-body az-content-body-profile">
+            <div class="az-profile-body">
+                <h1>Détails de la prise en charge</h1>
+                <h2>Prestations associées</h2>
+                <div class="table-responsive">
+                    <table class="table table-striped mg-b-0">
+                        <thead>
+                            <tr>
+                                <th>Prestation</th>
+                                <th>Montant total</th>
+                                <th>Montant pris en charge</th>
+                                <th>Montant du ticket modérateur</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for prestation in prestations %}
+                            <tr>
+                                <td>{{ prestation.prestation.nom }}</td>
+                                <td>{{ prestation.montant_total }}</td>
+                                <td>{{ prestation.montant_pris_en_charge }}</td>
+                                <td>{{ prestation.montant_moderateur }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-3">
+                    <a href="{% url 'ajouter_prestationsex' id=prise_en_charge.id %}" class="btn btn-primary">Ajouter des examens</a>
+                    <a href="{% url 'ajouter_prescription' id=prise_en_charge.id %}" class="btn btn-secondary">Ajouter des prescriptions</a>
+                    <a href="{% url 'prise_en_charge' %}" class="btn btn-outline-dark">Retour aux prises en charge</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

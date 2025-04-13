@@ -1,0 +1,61 @@
+{% extends 'backoffice/base back.html' %}
+
+{% block content %}
+<h1>Liste des Centres de Santé</h1>
+
+<!-- Formulaire de recherche -->
+<form method="get" action="{% url 'liste_centre_sante' %}">
+    <input type="text" name="recherche" placeholder="Rechercher un centre"
+           value="{{ recherche }}" />
+    <button type="submit">Rechercher</button>
+</form>
+
+<!-- Liste des centres -->
+<table>
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Type</th>
+            <th>Adresse</th>
+            <th>Téléphone</th>
+            <th>Email</th>
+            <th>Groupe</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for centre in centres %}
+        <tr>
+            <td>{{ centre.nom }}</td>
+            <td>{{ centre.type }}</td>
+            <td>{{ centre.adresse }}</td>
+            <td>{{ centre.telephone }}</td>
+            <td>{{ centre.email }}</td>
+            <td>{{ centre.groupe }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">Aucun centre de santé trouvé.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Pagination -->
+<div class="pagination">
+    <span class="step-links">
+        {% if centres.has_previous %}
+            <a href="?page=1">Première</a>
+            <a href="?page={{ centres.previous_page_number }}">Précédente</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ centres.number }} sur {{ centres.paginator.num_pages }}
+        </span>
+
+        {% if centres.has_next %}
+            <a href="?page={{ centres.next_page_number }}">Suivante</a>
+            <a href="?page={{ centres.paginator.num_pages }}">Dernière</a>
+        {% endif %}
+    </span>
+</div>
+{% endblock %}

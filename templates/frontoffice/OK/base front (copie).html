@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+  <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90680653-2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-90680653-2');
+    </script>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Twitter -->
+    <!-- <meta name="twitter:site" content="@bootstrapdash">
+    <meta name="twitter:creator" content="@bootstrapdash">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Azia">
+    <meta name="twitter:description" content="Responsive Bootstrap 4 Dashboard Template">
+    <meta name="twitter:image" content="https://www.bootstrapdash.com/azia/img/azia-social.png"> -->
+
+    <!-- Facebook -->
+    <!-- <meta property="og:url" content="https://www.bootstrapdash.com/azia">
+    <meta property="og:title" content="Azia">
+    <meta property="og:description" content="Responsive Bootstrap 4 Dashboard Template">
+
+    <meta property="og:image" content="https://www.bootstrapdash.com/azia/img/azia-social.png">
+    <meta property="og:image:secure_url" content="https://www.bootstrapdash.com/azia/img/azia-social.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="600"> -->
+
+    <!-- Meta -->
+    <meta name="description" content="Responsive Bootstrap 4 Dashboard Template">
+    <meta name="author" content="BootstrapDash">
+
+    <title>Azia Responsive Bootstrap 4 Dashboard Template</title>
+
+    <!-- vendor css -->
+    <link href="{% static 'frontoffice/lib/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
+    <link href="{% static 'frontoffice/lib/ionicons/css/ionicons.min.css' %}" rel="stylesheet">
+    <link href="{% static 'frontoffice/lib/typicons.font/typicons.css' %}" rel="stylesheet">
+    <link href="{% static 'frontoffice/lib/flag-icon-css/css/flag-icon.min.css' %}" rel="stylesheet">
+    <link href="{% static 'frontoffice/lib/datatables.net-dt/css/jquery.dataTables.min.css' %}" rel="stylesheet">
+    <link href="{% static 'frontoffice/lib/datatables.net-responsive-dt/css/responsive.dataTables.min.css' %}" rel="stylesheet">
+    <link href="{% static 'frontoffice/lib/select2/css/select2.min.css' %}" rel="stylesheet">
+
+    <!-- azia CSS -->
+    <link rel="stylesheet" href="{% static 'frontoffice/css/azia.css' %}">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+  </head>
+  <body>
+
+    <div class="az-header">
+      <div class="container">
+        <div class="az-header-left">
+          <a href="index.html" class="az-logo"><span></span> azia</a>
+          <a href="" id="azMenuShow" class="az-header-menu-icon d-lg-none"><span></span></a>
+        </div><!-- az-header-left -->
+        <div class="az-header-menu">
+          <div class="az-header-menu-header">
+            <a href="index.html" class="az-logo"><span></span> azia</a>
+            <a href="" class="close">&times;</a>
+          </div><!-- az-header-menu-header -->
+          <ul class="nav">
+            <li class="nav-item active show">
+              <a href="index.html" class="nav-link"><i class="typcn typcn-chart-area-outline"></i> Dashboard</a>
+            </li>
+            <li class="nav-item">
+              <a href="" class="nav-link with-sub"><i class="typcn typcn-document"></i> Pages</a>
+              <nav class="az-menu-sub">
+                <a href="page-signin.html" class="nav-link">Sign In</a>
+                <a href="page-signup.html" class="nav-link">Sign Up</a>
+              </nav>
+            </li>
+            <li class="nav-item">
+              <a href="#modaldemo3" class="nav-link" data-bs-toggle="modal"><i class="typcn typcn-chart-bar-outline"></i> Prise en charge</a>
+            </li> 
+            <li class="nav-item">
+              <a href="#modaldemo4" class="nav-link" data-bs-toggle="modal"><i class="typcn typcn-chart-bar-outline"></i> Hopis</a>
+            </li>  
+            <li class="nav-item">
+              <a href="#modaldemo5" class="nav-link" data-bs-toggle="modal"><i class="typcn typcn-chart-bar-outline"></i> Dispensation</a>
+            </li>                      
+            <li class="nav-item">
+              <a href="{% url 'tableau_de_bord' %}" class="nav-link"><i class="typcn typcn-chart-bar-outline"></i> Forms</a>
+            </li>
+            <li class="nav-item">
+              <a href="" class="nav-link with-sub"><i class="typcn typcn-book"></i> Components</a>
+              <div class="az-menu-sub">
+                <div class="container">
+                  <div>
+                    <nav class="nav">
+                      <a href="elem-buttons.html" class="nav-link">Buttons</a>
+                      <a href="elem-dropdown.html" class="nav-link">Dropdown</a>
+                      <a href="elem-icons.html" class="nav-link">Icons</a>
+                      <a href="table-basic.html" class="nav-link">Table</a>
+                    </nav>
+                  </div>
+                </div><!-- container -->
+              </div>
+            </li>
+          </ul>
+        </div><!-- az-header-menu -->
+        <div class="az-header-right">
+          <a href="https://www.bootstrapdash.com/demo/azia-free/docs/documentation.html" target="_blank" class="az-header-search-link"><i class="far fa-file-alt"></i></a>
+          <a href="" class="az-header-search-link"><i class="fas fa-search"></i></a>
+          <div class="az-header-message">
+            <a href="#"><i class="typcn typcn-messages"></i></a>
+          </div><!-- az-header-message -->
+          <div class="dropdown az-header-notification">
+            <a href="" class="new"><i class="typcn typcn-bell"></i></a>
+            <div class="dropdown-menu">
+              <div class="az-dropdown-header mg-b-20 d-sm-none">
+                <a href="" class="az-header-arrow"><i class="icon ion-md-arrow-back"></i></a>
+              </div>
+              <h6 class="az-notification-title">Notifications</h6>
+              <p class="az-notification-text">You have 2 unread notification</p>
+              <div class="az-notification-list">
+                <div class="media new">
+                  <div class="az-img-user"><img src="{% static 'img/faces/face2.jpg' %}" alt=""></div>
+                  <div class="media-body">
+                    <p>Congratulate <strong>Socrates Itumay</strong> for work anniversaries</p>
+                    <span>Mar 15 12:32pm</span>
+                  </div><!-- media-body -->
+                </div><!-- media -->
+                <div class="media new">
+                  <div class="az-img-user online"><img src="{% static 'img/faces/face3.jpg' %}" alt=""></div>
+                  <div class="media-body">
+                    <p><strong>Joyce Chua</strong> just created a new blog post</p>
+                    <span>Mar 13 04:16am</span>
+                  </div><!-- media-body -->
+                </div><!-- media -->
+                <div class="media">
+                  <div class="az-img-user"><img src="{% static 'img/faces/face4.jpg' %}" alt=""></div> 
+                  <div class="media-body">
+                    <p><strong>Althea Cabardo</strong> just created a new blog post</p>
+                    <span>Mar 13 02:56am</span>
+                  </div><!-- media-body -->
+                </div><!-- media -->
+                <div class="media">
+                  <div class="az-img-user"><img src="{% static 'img/faces/face5.jpg' %}" alt=""></div>
+                  <div class="media-body">
+                    <p><strong>Adrian Monino</strong> added new comment on your photo</p>
+                    <span>Mar 12 10:40pm</span>
+                  </div><!-- media-body -->
+                </div><!-- media -->
+              </div><!-- az-notification-list -->
+              <div class="dropdown-footer"><a href="">View All Notifications</a></div>
+            </div><!-- dropdown-menu -->
+          </div><!-- az-header-notification -->
+          <div class="dropdown az-profile-menu">
+            <a href="" class="az-img-user"><img src="{% static 'img/faces/face1.jpg' %}" alt=""></a>
+            <div class="dropdown-menu">
+              <div class="az-dropdown-header d-sm-none">
+                <a href="" class="az-header-arrow"><i class="icon ion-md-arrow-back"></i></a>
+              </div>
+              <div class="az-header-profile">
+                {% if user.is_authenticated %}
+                  {% csrf_token %}
+                <div class="az-img-user">
+                  <img src="../img/faces/face1.jpg" alt=""> 
+                </div><!-- az-img-user -->
+                <h6>{{ user.username }}</h6>
+                <span>{{ user.role }} de {{ user.groupe }}</span>
+                {% endif %}
+              </div><!-- az-header-profile -->
+
+              <a href="" class="dropdown-item"><i class="typcn typcn-user-outline"></i> My Profile</a>
+              <a href="" class="dropdown-item"><i class="typcn typcn-edit"></i> Edit Profile</a>
+              <a href="" class="dropdown-item"><i class="typcn typcn-time"></i> Activity Logs</a>
+              <a href="" class="dropdown-item"><i class="typcn typcn-cog-outline"></i> Account Settings</a>
+              <a href="{% url 'signup' %}" class="dropdown-item"><i class="typcn typcn-power-outline"></i> Sign Out</a>
+            </div><!-- dropdown-menu -->
+          </div>
+        </div><!-- az-header-right -->
+      </div><!-- container -->
+    </div><!-- az-header -->
+
+    <div class="az-content pd-y-20 pd-lg-y-30 pd-xl-y-40">
+      <div class="container">
+        <div class="az-content-left az-content-left-components">
+          <div class="component-item">
+            <label>UI Elements</label>
+            <nav class="nav flex-column">
+              <a href="elem-buttons.html" class="nav-link">Buttons</a>
+              <a href="elem-dropdown.html" class="nav-link">Dropdown</a>
+              <a href="elem-icons.html" class="nav-link">Icons</a>
+            </nav>
+            <label>Forms</label>
+            <nav class="nav flex-column">
+              <a href="{% url 'tableau_de_bord' %}" class="nav-link">Form Elements</a>
+            </nav>
+            <label>Charts</label>
+            <nav class="nav flex-column">
+              <a href="{% url 'prise_en_charge' %}" class="nav-link">ChartJS</a>
+            </nav>
+
+            <label>Tables</label>
+            <nav class="nav flex-column">
+              <a href="table-basic.html" class="nav-link active">Basic Tables</a>
+            </nav>
+          </div><!-- component-item -->
+
+        </div><!-- az-content-left -->
+        <div class="az-content-body pd-lg-l-40 d-flex flex-column">
+          <div class="az-content-breadcrumb">
+            <span>Components</span>
+            <span>Tables</span>
+            <span>Basic Tables</span>
+          </div>
+          <h2 class="az-content-title">Basic Tables</h2>
+
+          <div class="az-content-label mg-b-5">Simple Table</div>
+          <p class="mg-b-20">Using the most basic table markup.</p>
+
+          <div class="table-responsive">
+
+
+                                    {% block content %}{% endblock content %}
+                
+                
+
+          </div><!-- row -->
+        </div><!-- az-content-body -->
+      </div>
+    </div><!-- az-content -->
+                        
+                            <div class="az-footer ht-40">
+                              <div class="container ht-100p pd-t-0-f">
+                                <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © bootstrapdash.com 2020</span>
+                                <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap admin templates</a> from Bootstrapdash.com</span>
+                              </div><!-- container -->
+                            </div><!-- az-footer -->
+
+                            <!-- Modal pour la prise en charge -->
+                            <div id="modaldemo3" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalPriseEnCharge" aria-hidden="true">
+                              <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="modalPriseEnCharge">Prise en charge</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <form id="formRechercheMatricule">
+                                      <div class="mb-3">
+                                        <label for="matricule" class="form-label">Saisissez le matricule</label>
+                                        <input type="text" id="matricule" name="matricule" class="form-control" placeholder="Exemple : MUT12345">
+                                      </div>
+                                      <button type="submit" class="btn btn-primary">Rechercher</button>
+                                    </form>
+                                    <div id="resultat" class="mt-4"></div>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <!-- Modal pour la prise en charge -->
+                            <div id="modaldemo4" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalPriseEnCharge" aria-hidden="true">
+                              <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="modalPriseEnChargehospi">Hospi</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <form id="formRechercheMatriculehospi">
+                                      <div class="mb-3">
+                                        <label for="matricule" class="form-label">Saisissez le matricule</label>
+                                        <input type="text" id="matriculehospi" name="matricule" class="form-control" placeholder="Exemple : MUT12345">
+                                      </div>
+                                      <button type="submit" class="btn btn-primary">Rechercher</button>
+                                    </form>
+                                    <div id="resultathospi" class="mt-4"></div>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <!-- Modal pour la dispensation -->
+                            <!-- Modal pour la dispensation -->
+                            <div id="modaldemo5" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalDispensation" aria-hidden="true">
+                              <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="modalDispensation">Dispensation</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <form id="formRechercheCodedisp">
+                                      <div class="mb-3">
+                                        <label for="matriculedisp" class="form-label">Saisissez le code prescription</label>
+                                        <input type="text" id="matriculedisp" name="matricule" class="form-control" placeholder="Exemple : MUT12345" required>
+                                      </div>
+                                      <button type="submit" class="btn btn-primary">Rechercher</button>
+                                    </form>
+                                    <div id="resultatdisp" class="mt-4"></div>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+
+                        
+                            <script src="{% static 'frontoffice/lib/jquery/jquery.min.js' %}"></script>
+                            <script src="{% static 'frontoffice/lib/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+                            <script src="{% static 'frontoffice/lib/ionicons/ionicons.js' %}"></script>
+                            <script src="{% static 'frontoffice/lib/jquery.flot/jquery.flot.js' %}"></script>
+                            <script src="{% static 'frontoffice/lib/jquery.flot/jquery.flot.resize.js' %}"></script>
+                            <script src="{% static 'frontoffice/lib/chart.js/Chart.bundle.min.js' %}"></script>
+                            <script src="{% static 'frontoffice/lib/peity/jquery.peity.min.js' %}"></script>
+                        
+                            <script src="{% static 'frontoffice/js/azia.js' %}"></script>
+                            <script src="{% static 'frontoffice/js/chart.flot.sampledata.js' %}"></script>
+                            <script src="{% static 'frontoffice/js/dashboard.sampledata.js' %}"></script>
+                            <script src="{% static 'frontoffice/js/jquery.cookie.js' %}" type="text/javascript"></script>
+                            <script src="{% static 'frontoffice/lib/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+                            <script src="{% static 'frontoffice/lib/datatables.net-dt/js/dataTables.dataTables.min.js' %}"></script>
+                            <script src="{% static 'frontoffice/lib/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
+                            <script src="{% static 'frontoffice/lib/datatables.net-responsive-dt/js/responsive.dataTables.min.js' %}"></script>
+                            <script src="{% static 'frontoffice/lib/select2/js/select2.min.js' %}"></script>
+                            <script>
+                              $(function(){
+                                'use strict'
+                        
+                                var plot = $.plot('#flotChart', [{
+                                  data: flotSampleData3,
+                                  color: '#007bff',
+                                  lines: {
+                                    fillColor: { colors: [{ opacity: 0 }, { opacity: 0.2 }]}
+                                  }
+                                },{
+                                  data: flotSampleData4,
+                                  color: '#560bd0',
+                                  lines: {
+                                    fillColor: { colors: [{ opacity: 0 }, { opacity: 0.2 }]}
+                                  }
+                                }], {
+                                  series: {
+                                    shadowSize: 0,
+                                    lines: {
+                                      show: true,
+                                      lineWidth: 2,
+                                      fill: true
+                                    }
+                                  },
+                                  grid: {
+                                    borderWidth: 0,
+                                    labelMargin: 8
+                                  },
+                                  yaxis: {
+                                    show: true,
+                                    min: 0,
+                                    max: 100,
+                                    ticks: [[0,''],[20,'20K'],[40,'40K'],[60,'60K'],[80,'80K']],
+                                    tickColor: '#eee'
+                                  },
+                                  xaxis: {
+                                    show: true,
+                                    color: '#fff',
+                                    ticks: [[25,'OCT 21'],[75,'OCT 22'],[100,'OCT 23'],[125,'OCT 24']],
+                                  }
+                                });
+                        
+                                $.plot('#flotChart1', [{
+                                  data: dashData2,
+                                  color: '#00cccc'
+                                }], {
+                                  series: {
+                                    shadowSize: 0,
+                                    lines: {
+                                      show: true,
+                                      lineWidth: 2,
+                                      fill: true,
+                                      fillColor: { colors: [ { opacity: 0.2 }, { opacity: 0.2 } ] }
+                                    }
+                                  },
+                                  grid: {
+                                    borderWidth: 0,
+                                    labelMargin: 0
+                                  },
+                                  yaxis: {
+                                    show: false,
+                                    min: 0,
+                                    max: 35
+                                  },
+                                  xaxis: {
+                                    show: false,
+                                    max: 50
+                                  }
+                                });
+                        
+                                $.plot('#flotChart2', [{
+                                  data: dashData2,
+                                  color: '#007bff'
+                                }], {
+                                  series: {
+                                    shadowSize: 0,
+                                    bars: {
+                                      show: true,
+                                      lineWidth: 0,
+                                      fill: 1,
+                                      barWidth: .5
+                                    }
+                                  },
+                                  grid: {
+                                    borderWidth: 0,
+                                    labelMargin: 0
+                                  },
+                                  yaxis: {
+                                    show: false,
+                                    min: 0,
+                                    max: 35
+                                  },
+                                  xaxis: {
+                                    show: false,
+                                    max: 20
+                                  }
+                                });
+                        
+                        
+                                //-------------------------------------------------------------//
+                        
+                        
+                                // Line chart
+                                $('.peity-line').peity('line');
+                        
+                                // Bar charts
+                                $('.peity-bar').peity('bar');
+                        
+                                // Bar charts
+                                $('.peity-donut').peity('donut');
+                        
+                                var ctx5 = document.getElementById('chartBar5').getContext('2d');
+                                new Chart(ctx5, {
+                                  type: 'bar',
+                                  data: {
+                                    labels: [0,1,2,3,4,5,6,7],
+                                    datasets: [{
+                                      data: [2, 4, 10, 20, 45, 40, 35, 18],
+                                      backgroundColor: '#560bd0'
+                                    }, {
+                                      data: [3, 6, 15, 35, 50, 45, 35, 25],
+                                      backgroundColor: '#cad0e8'
+                                    }]
+                                  },
+                                  options: {
+                                    maintainAspectRatio: false,
+                                    tooltips: {
+                                      enabled: false
+                                    },
+                                    legend: {
+                                      display: false,
+                                        labels: {
+                                          display: false
+                                        }
+                                    },
+                                    scales: {
+                                      yAxes: [{
+                                        display: false,
+                                        ticks: {
+                                          beginAtZero:true,
+                                          fontSize: 11,
+                                          max: 80
+                                        }
+                                      }],
+                                      xAxes: [{
+                                        barPercentage: 0.6,
+                                        gridLines: {
+                                          color: 'rgba(0,0,0,0.08)'
+                                        },
+                                        ticks: {
+                                          beginAtZero:true,
+                                          fontSize: 11,
+                                          display: false
+                                        }
+                                      }]
+                                    }
+                                  }
+                                });
+                        
+                                // Donut Chart
+                                var datapie = {
+                                  labels: ['Search', 'Email', 'Referral', 'Social', 'Other'],
+                                  datasets: [{
+                                    data: [25,20,30,15,10],
+                                    backgroundColor: ['#6f42c1', '#007bff','#17a2b8','#00cccc','#adb2bd']
+                                  }]
+                                };
+                        
+                                var optionpie = {
+                                  maintainAspectRatio: false,
+                                  responsive: true,
+                                  legend: {
+                                    display: false,
+                                  },
+                                  animation: {
+                                    animateScale: true,
+                                    animateRotate: true
+                                  }
+                                };
+                        
+                                // For a doughnut chart
+                                var ctxpie= document.getElementById('chartDonut');
+                                var myPieChart6 = new Chart(ctxpie, {
+                                  type: 'doughnut',
+                                  data: datapie,
+                                  options: optionpie
+                                });
+                        
+                              });
+                            </script>
+                            <script>
+                              $(function(){
+                                'use strict'
+                        
+                                $('#example1').DataTable({
+                                  language: {
+                                    searchPlaceholder: 'Search...',
+                                    sSearch: '',
+                                    lengthMenu: '_MENU_ items/page',
+                                  }
+                                });
+                        
+                                $('#example2').DataTable({
+                                  responsive: true,
+                                  language: {
+                                    searchPlaceholder: 'Search...',
+                                    sSearch: '',
+                                    lengthMenu: '_MENU_ items/page',
+                                  }
+                                });
+                        
+                                // Select2
+                                $('.dataTables_length select').select2({ minimumResultsForSearch: Infinity });
+                        
+                              });
+                            </script>
+                            <script>
+                              $(function(){
+                                'use strict'
+                        
+                                // showing modal with effect
+                                $('.modal-effect').on('click', function(e){
+                                  e.preventDefault();
+                                  var effect = $(this).attr('data-effect');
+                                  $('#modaldemo8').addClass(effect);
+                                });
+                        
+                                // hide modal with effect
+                                $('#modaldemo8').on('hidden.bs.modal', function (e) {
+                                  $(this).removeClass (function (index, className) {
+                                      return (className.match (/(^|\s)effect-\S+/g) || []).join(' ');
+                                  });
+                                });
+                        
+                              });
+                            </script>
+                            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+                            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" defer></script>
+                            <script>
+                              document.addEventListener('DOMContentLoaded', () => {
+                                const form = document.getElementById('formRechercheMatricule');
+                                const resultat = document.getElementById('resultat');
+                              
+                                form.addEventListener('submit', function (e) {
+                                  e.preventDefault();
+                                  const matricule = document.getElementById('matricule').value;
+                              
+                                  // Appel à l'API pour valider le matricule
+                                  fetch(`/valider-matricule/?matricule=${matricule}`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                      if (data.status === "success" && data.data.id) {
+                                        // Redirection vers une autre page avec l'ID du client
+                                        window.location.href = `/frontoffice/ajouter-prestations/${data.data.id}`;
+                                      } else {
+                                        // Affichage d'un message d'erreur
+                                        resultat.innerHTML = `<p class="text-danger">${data.message || "Matricule non valide ou ID introuvable."}</p>`;
+                                      }
+                                    })
+                                    .catch(err => {
+                                      resultat.innerHTML = `<p class="text-danger">Une erreur est survenue. Veuillez réessayer plus tard.</p>`;
+                                    });
+                                });
+                              });
+                              
+                            </script>
+                            <script>
+                              document.addEventListener('DOMContentLoaded', () => {
+                                const form = document.getElementById('formRechercheMatriculehospi');
+                                const resultat = document.getElementById('resultathospi');
+                              
+                                form.addEventListener('submit', function (e) {
+                                  e.preventDefault();
+                                  const matricule = document.getElementById('matriculehospi').value;
+                              
+                                  // Appel à l'API pour valider le matricule
+                                  fetch(`/valider-matricule/?matricule=${matricule}`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                      if (data.status === "success" && data.data.id) {
+                                        // Redirection vers une autre page avec l'ID du client
+                                        window.location.href = `/frontoffice/ajouter-prestationshospi/${data.data.id}`;
+                                      } else {
+                                        // Affichage d'un message d'erreur
+                                        resultat.innerHTML = `<p class="text-danger">${data.message || "Matricule non valide ou ID introuvable."}</p>`;
+                                      }
+                                    })
+                                    .catch(err => {
+                                      resultat.innerHTML = `<p class="text-danger">Une erreur est survenue. Veuillez réessayer plus tard.</p>`;
+                                    });
+                                });
+                              });                             
+                            </script>
+                            <script>
+                              document.addEventListener('DOMContentLoaded', () => {
+                                const form = document.getElementById('formRechercheCodedisp');
+                                const resultat = document.getElementById('resultatdisp');
+                            
+                                form.addEventListener('submit', function (e) {
+                                    e.preventDefault();
+                                    const codePrescription = document.getElementById('matriculedisp').value;
+                            
+                                    fetch(`/valider-code_prescription/?code_prescription=${codePrescription}`)
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.status === "success" && data.data.id) {
+                                                // Redirection vers la page d'ajout de dispensation avec l'ID de la prescription
+                                                window.location.href = `/frontoffice/ajouter-dispensation/${data.data.id}`;
+                                            } else {
+                                                // Affichage d'un message d'erreur si le code n'est pas valide
+                                                resultat.innerHTML = `<p class="text-danger">${data.message || "Code prescription non valide ou ID introuvable."}</p>`;
+                                            }
+                                        })
+                                        .catch(err => {
+                                            resultat.innerHTML = `<p class="text-danger">Une erreur est survenue. Veuillez réessayer plus tard.</p>`;
+                                        });
+                                });
+                            });
+                            
+                            </script>
+                            
+                          </body>
+                        </html>
+                        

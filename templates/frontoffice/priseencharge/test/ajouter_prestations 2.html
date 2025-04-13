@@ -1,0 +1,27 @@
+{% extends 'frontoffice/base front.html' %}
+
+{% block content %}
+
+  <div class="container mt-5">
+    <h2>Ajouter Prestations</h2>
+    <form id="formAjouterPrestations" action="/ajouter-prestations/{{ client.id }}" method="POST">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="prestation" class="form-label">Type de prestation</label>
+        <h3>Ajouter des prestations pour {{ client.nom }} {{ client.prenom }}</h3>
+        <select id="prestation" name="prestation" class="form-control" required>
+          <option value="">Sélectionnez une prestation</option>
+          <option value="consultation">Consultation</option>
+          <option value="hospitalisation">Hospitalisation</option>
+          <option value="médicament">Médicament</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="details" class="form-label">Détails</label>
+        <textarea id="details" name="details" class="form-control" rows="4" placeholder="Ajoutez les détails de la prestation"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Ajouter</button>
+    </form>
+  </div>
+
+{% endblock content %}

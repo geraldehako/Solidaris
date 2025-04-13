@@ -1,0 +1,15 @@
+{% for prestation in prestations %}
+<tr>
+    <td>{{ prestation.nom }}</td>
+    <td>
+        <input type="checkbox" name="prestations" value="{{ prestation.id }}">
+    </td>
+    <td>
+        <input type="text" name="tarifs_personnalises_{{ prestation.id }}" class="form-control" placeholder="Tarif en FCFA">
+    </td>
+</tr>
+{% empty %}
+<tr>
+    <td colspan="3" class="text-center">Aucune prestation trouvée.</td>
+</tr>
+{% endfor %}

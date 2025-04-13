@@ -1,0 +1,121 @@
+{% extends 'frontoffice/base front.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-lg p-4">
+        <h2 class="text-primary">Facture N°{{ facture.numero_facture }} - {{ facture.intitule_facture }}</h2>
+        <p><strong>Centre :</strong> {{ facture.centre.nom }}</p>
+        <p><strong>Total Général :</strong> <span class="badge bg-success">{{ facture.total_general }} FCFA</span></p>
+
+        <button class="btn btn-primary my-3 d-print-none" onclick="window.print()">
+            <i class="bi bi-printer"></i> Imprimer la Facture
+        </button>
+
+        <h3 class="mt-4 text-secondary">Détails de la Facture</h3>
+
+        {% if prestations %}
+            {% comment %} Initialisation des totaux {% endcomment %}
+            {% with total_patient=0 total_mutuelle=0 total_general=0 %}
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Date de Prestation</th>
+                            <th>Patient</th>
+                            <th>Nom médicament</th>
+                            <th class="text-end">Montant Patient (FCFA)</th>
+                            <th class="text-end">Montant Mutuelle (FCFA)</th>
+                            <th class="text-end">Montant Total (FCFA)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for prestation in prestations %}
+                        <tr>
+                            <td>{{ prestation.date_prestation|date:"d/m/Y H:i" }}</td>
+                            <td>{{ prestation.mutualiste.nom }} {{ prestation.mutualiste.prenom }}</td>
+                            <td>
+                                <ul>
+                                    {% for medicament in prestation.medicaments_utilises.all %}
+                                        <li>{{ medicament.nom }}</li>
+                                    {% empty %}
+                                        <li>Aucun médicament</li>
+                                    {% endfor %}
+                                </ul>
+                            </td>                                                       
+                            <td class="text-end">
+                                {{ prestation.part_mutualiste|floatformat:2 }}
+                                {% with total_patient=total_patient|add:prestation.part_mutualiste %}
+                                {% endwith %}
+                            </td>
+                            <td class="text-end">
+                                {{ prestation.part_mutuelle|floatformat:2 }}
+                                {% with total_mutuelle=total_mutuelle|add:prestation.part_mutuelle %}
+                                {% endwith %}
+                            </td>
+                            <td class="text-end">
+                                {{ prestation.montant_total|floatformat:2 }}
+                                {% with total_general=total_general|add:prestation.montant_total %}
+                                {% endwith %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot class="table-light fw-bold">
+                        <tr>
+                            <td colspan="3" class="text-end">TOTAL :</td>
+                            <td class="text-end">{{ facture.total_patient|floatformat:2 }} FCFA</td>
+                            <td class="text-end">{{ facture.total_mutuelle|floatformat:2 }} FCFA</td>
+                            <td class="text-end">{{ facture.total_general|floatformat:2 }} FCFA</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            {% endwith %}
+        {% else %}
+            <div class="alert alert-warning mt-3">Aucune prestation trouvée pour cette facture.</div>
+        {% endif %}
+    </div>
+</div></br><br>
+
+<!-- CSS pour l'impression -->
+<style>
+    @media print {
+        body {
+            font-size: 12px;
+            color: #000;
+            background: none;
+        }
+
+        .btn {
+            display: none !important; /* Cache les boutons à l'impression */
+        }
+
+        .container {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th, .table td {
+            border: 1px solid black !important;
+            padding: 5px;
+        }
+
+        .table tfoot {
+            font-weight: bold;
+            background-color: #f8f9fa;
+        }
+
+        .card {
+            border: none;
+            box-shadow: none;
+        }
+    }
+</style>
+
+{% endblock %}

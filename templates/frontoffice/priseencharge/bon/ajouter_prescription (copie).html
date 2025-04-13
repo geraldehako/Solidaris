@@ -1,0 +1,95 @@
+{% extends 'frontoffice/base front.html' %}
+
+{% block content %}
+<!-- Single pro tab review Start-->
+<div class="single-pro-review-area mt-t-30 mg-b-15">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="product-payment-inner-st">
+                    <h1>{% if prescription_form.instance.pk %}Modifier{% else %}Créer{% endif %} une Prescription</h1>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            {{ prescription_form.prise_en_charge.label_tag }}
+                                            {{ prescription_form.prise_en_charge }}
+                                        </div>
+                                        <div class="form-group">
+                                            {{ prescription_form.date_prescription.label_tag }}
+                                            {{ prescription_form.date_prescription }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Section Médicaments Prescrits -->
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <h3>Médicaments Prescrits</h3>
+                                {{ formset.management_form }}
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Médicament</th>
+                                            <th>Quantité Prescrite</th>
+                                            <th>Posologie</th>
+                                            <th>Substitution Possible</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for form in formset %}
+                                        <tr>
+                                            <td>{{ form.medicament }}</td>
+                                            <td>{{ form.quantite_prescrite }}</td>
+                                            <td>{{ form.posologie }}</td>
+                                            <td>{{ form.substitution_possible }}</td>
+                                            <td>
+                                                {% if form.instance.pk %}
+                                                <input type="checkbox" name="{{ form.DELETE.html_name }}" class="form-check-input">
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                <button type="button" class="btn btn-success" onclick="addForm()">Ajouter un médicament</button>
+                            </div>
+
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+                                <button type="submit" class="btn btn-primary waves-effect waves-light">Enregistrer</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function addForm() {
+        const formsetPrefix = "{{ formset.prefix }}";
+        const totalForms = document.getElementById("id_" + formsetPrefix + "-TOTAL_FORMS");
+        const maxForms = document.getElementById("id_" + formsetPrefix + "-MAX_NUM_FORMS");
+        const tableBody = document.querySelector("table tbody");
+
+        if (totalForms && maxForms && tableBody) {
+            const total = parseInt(totalForms.value);
+            const max = parseInt(maxForms.value);
+
+            if (total < max || max === 1000) {  // 1000 est une valeur arbitraire pour éviter une limitation stricte
+                const emptyForm = "{{ formset.empty_form.as_table|escapejs }}";
+                const newForm = emptyForm.replace(/__prefix__/g, total);
+                tableBody.insertAdjacentHTML("beforeend", newForm);
+                totalForms.value = total + 1;
+            } else {
+                alert("Vous avez atteint le nombre maximum de formulaires.");
+            }
+        }
+    }
+</script>
+{% endblock content %}

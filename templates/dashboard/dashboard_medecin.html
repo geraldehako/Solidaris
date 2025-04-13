@@ -1,0 +1,61 @@
+{% extends 'frontoffice/base front.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="az-content-title">📊 Statistiques du Médecin Conseil</h2>
+
+    <!-- Filtre période --> 
+    <form method="get" class="mb-3">
+        <select name="periode" onchange="this.form.submit()" class="form-control w-auto d-inline-block">
+            <option value="jour" {% if periode == 'jour' %}selected{% endif %}>Aujourd'hui</option>
+            <option value="semaine" {% if periode == 'semaine' %}selected{% endif %}>Cette semaine</option>
+            <option value="mois" {% if periode == 'mois' %}selected{% endif %}>Ce mois</option>
+            <option value="annee" {% if periode == 'annee' %}selected{% endif %}>Cette année</option>
+        </select>
+    </form>
+
+    <!-- Bouton export -->
+    <button class="btn btn-outline-primary mb-3" onclick="window.print()">📄 Exporter PDF</button>
+
+    <!-- Graphique -->
+    <canvas id="statsChart" height="100"></canvas></br>
+
+    <!-- Script Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('statsChart').getContext('2d');
+        const statsChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Hospitalisations', 'Examens', 'Optiques'],
+                datasets: [
+                    {
+                        label: 'En attente',
+                        data: [{{ stats.hospitalisations_en_attente }}, {{ stats.examens_en_attente }}, {{ stats.optiques_en_attente }}],
+                        backgroundColor: '#ffc107'
+                    },
+                    {
+                        label: 'Validées',
+                        data: [{{ stats.hospitalisations_validees }}, {{ stats.examens_valides }}, {{ stats.optiques_valides }}],
+                        backgroundColor: '#28a745'
+                    },
+                    {
+                        label: 'Refusées',
+                        data: [{{ stats.hospitalisations_refusees }}, {{ stats.examens_refuses }}, {{ stats.optiques_refuses }}],
+                        backgroundColor: '#dc3545'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top' },
+                    title: {
+                        display: true,
+                        text: 'Répartition des prestations par statut'
+                    }
+                }
+            }
+        });
+    </script>
+</div>
+{% endblock %}

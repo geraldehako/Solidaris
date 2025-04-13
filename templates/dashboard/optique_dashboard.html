@@ -1,0 +1,92 @@
+{% extends 'frontoffice/base front.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Tableau de Bord - Centre de Santé Connecté</h2>
+
+    <div class="row">
+        <!-- Total Prises en Charge -->
+        <div class="col-md-3">
+            <div class="card text-white bg-primary mb-3 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Total Prises en Charge</h5>
+                    <p class="card-text display-5">{{ total_prises_en_charge }}</p>
+                </div>
+            </div>
+        </div>
+        <!-- Total Prestations Validées -->
+        <div class="col-md-3">
+            <div class="card text-white bg-success mb-3 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Prestations Validées</h5>
+                    <p class="card-text display-5">{{ total_prestationsvalide }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Prestations Non Validées -->
+        <div class="col-md-3">
+            <div class="card text-white bg-danger mb-3 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Prestations Non Validées</h5>
+                    <p class="card-text display-5">{{ total_prestationsnonvalide }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Montant Total des Prestations</h5>
+                    <p class="card-text display-5">{{ montant_total_prestations }} FCFA</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <h4>Évolution des Prises en Charge</h4>
+            <canvas id="prisesChart"></canvas>
+        </div>
+        <div class="col-md-6">
+            <h4>Évolution des Prestations</h4>
+            <canvas id="prestationsChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    var ctx1 = document.getElementById('prisesChart').getContext('2d');
+    var prisesChart = new Chart(ctx1, {
+        type: 'line',
+        data: {
+            labels: {{ prises_labels|safe }},
+            datasets: [{
+                label: 'Nombre de Prises en Charge',
+                data: {{ prises_values|safe }},
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderWidth: 2
+            }]
+        }
+    });
+
+    var ctx2 = document.getElementById('prestationsChart').getContext('2d');
+    var prestationsChart = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: {{ prestations_labels|safe }},
+            datasets: [{
+                label: 'Nombre de Prestations',
+                data: {{ prestations_values|safe }},
+                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 2
+            }]
+        }
+    });
+</script>
+{% endblock %}
+

@@ -1,0 +1,64 @@
+{% extends 'frontoffice/base front.html' %}
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="az-content az-content-profile">
+    <div class="container mn-ht-100p">
+        <div class="content-wrapper w-100">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                        <h2 class="mb-4">Dashboard Point Focal</h2> 
+
+                             <!-- Tableau des mutualistes -->
+                             <div class="card mt-12 shadow-lg">
+                                <div class="card-header bg-warning text-white fw-bold text-center">
+                                    📋 Liste des cotisations
+                                </div>                                
+                                <div class="card-body">
+                                    <table id="example1" class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Periode</th>
+                                                <th>Total Adhésion</th>
+                                                <th>Total Cotisation</th>
+                                                <th>Total Général</th>
+                                                <th>Total Payer</th>
+                                                <th>Total Restant</th>
+                                                <th>Statut</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for cotisation in cotisations %}
+                                            <tr>
+                                                <td>{{ cotisation.intitule_cotisation }}</td>
+                                                <td>{{ cotisation.total_adhesion }} FCFA</td>
+                                                <td>{{ cotisation.total_cotisation }} FCFA</td>
+                                                <td>{{ cotisation.total_general }} FCFA</td>
+                                                <td>{{ cotisation.total_payer }} FCFA</td>
+                                                <td>{{ cotisation.total_restant }} FCFA</td>
+                                                <td>{{ cotisation.statut }}</td>
+                                                <td>
+                                                    <a href="{% url 'point_focal_paiements' cotisation.id %}">Voir les paiements</a> 
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                            
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- container -->
+    </div><!-- az-content -->
+</div>
+
+{% endblock %}
+

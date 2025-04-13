@@ -1,0 +1,26 @@
+{% extends 'frontoffice/base front.html' %}
+
+{% block content %}
+<h1>Détails de la prise en charge</h1>
+
+<p>Mutualiste : {{ prise_en_charge.mutualiste.nom }} {{ prise_en_charge.mutualiste.prenoms }}</p>
+<p>Date de prise en charge : {{ prise_en_charge.date_prise_en_charge }}</p>
+<p>Durée de validité : {{ prise_en_charge.duree_validite }}</p>
+
+<h2>Prestations associées</h2>
+<ul>
+    {% for prestation in prestations %}
+        <li>
+            Prestation : {{ prestation.prestation.nom }}<br>
+            Médecin : {{ prestation.medecin_traitant.nom }}<br>
+            Montant total : {{ prestation.montant_total }}<br>
+            Montant pris en charge : {{ prestation.montant_pris_en_charge }}<br>
+            Montant du tick moderateur : {{ prestation.montant_moderateur }}<br>
+        </li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'ajouter_prestationsex' id=prise_en_charge.id %}">Ajouter des examens</a>
+<a href="{% url 'ajouter_prescription' id=prise_en_charge.id %}">Ajouter des prescription</a>
+<a href="{% url 'prise_en_charge' %}">Retour aux prises en charge</a>
+{% endblock content %}

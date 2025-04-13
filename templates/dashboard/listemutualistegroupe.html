@@ -1,0 +1,152 @@
+{% extends 'frontoffice/base front.html' %}
+{% block content %}
+<div class="az-content az-content-profile">
+    <div class="container mn-ht-100p">
+        <div class="az-content-left az-content-left-profile"> 
+            <div class="az-profile-overview">
+                <div class="az-img-user">
+                    <img src="{{ mutualiste.photo.url }}" alt="Photo du mutualiste">
+                </div>
+                <div class="d-flex justify-content-between mg-b-20">
+                    <div>
+                        <h5 class="az-profile-name">{{ mutualiste.nom }} {{ mutualiste.prenom }}</h5> 
+                        <p class="az-profile-name-text">{{ mutualiste.age }} Ans</p>
+                        <p class="az-profile-name-text">
+                            {% if mutualiste.sexe == "F" %} Féminin {% else %} Masculin {% endif %}
+                        </p>
+                    </div>                    
+                </div>
+                <div class="az-profile-bio">
+                    <p><strong>Date de prise en charge :</strong> {{ date_prise_en_charge }}</p>
+                    <p><strong>Durée de validité :</strong> {{ duree_validite }}</p>
+                </div>
+                <hr class="mg-y-30">
+                <div class="az-content-label mg-b-10">Statistiques des Prestations</div>
+                <div class="az-profile-social-list">
+                    <ul class="list-group wd-md-100p">
+                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="media-icon mg-r-15" style="color: #072C84;">
+                                    <i class="fas fa-file-medical"></i>
+                                </div>
+                                <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">Total des Prestations</h6>
+                            </div>
+                            <span class="d-block tx-11 text-muted text-right" style="color: #072C84;">
+                                {{ mutualiste.statistiques_prestations.total_prestations }}
+                            </span>
+                        </li>
+
+                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="media-icon mg-r-15" style="color: #072C84;">
+                                    <i class="fas fa-dollar-sign"></i>
+                                </div>
+                                <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">Montant Total</h6>
+                            </div>
+                            <span class="d-block tx-11 text-muted text-right" style="color: #072C84;">
+                                {{ mutualiste.statistiques_prestations.montant_total }}
+                            </span>
+                        </li>
+
+                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="media-icon mg-r-15" style="color: #072C84;">
+                                    <i class="fas fa-hand-holding-usd"></i>
+                                </div>
+                                <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">Part Mutuelle</h6>
+                            </div>
+                            <span class="d-block tx-11 text-muted text-right" style="color: #072C84;">
+                                {{ mutualiste.statistiques_prestations.part_mutuelle }}
+                            </span>
+                        </li>
+
+                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="media-icon mg-r-15" style="color: #072C84;">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">Part Mutualiste</h6>
+                            </div>
+                            <span class="d-block tx-11 text-muted text-right" style="color: #072C84;">
+                                {{ mutualiste.statistiques_prestations.part_mutualiste }}
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+        <div class="single-pro-review-area mt-t-30 mg-b-15">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="product-payment-inner-st">
+                             <!-- Tableau des mutualistes -->
+                            <div class="card mt-4 shadow-lg">
+                                <div class="card-header bg-primary text-white">Liste des Mutualistes</div>
+                                <div class="card-body">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Nom</th>
+                                                <th>Prénoms</th>
+                                                <th>Téléphone</th>
+                                                <th>Email</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for mutualiste in mutualistes %}
+                                            <tr>
+                                                <td>{{ mutualiste.nom }}</td>
+                                                <td>{{ mutualiste.prenoms }}</td>
+                                                <td>{{ mutualiste.telephone }}</td>
+                                                <td>{{ mutualiste.email }}</td>
+                                            </tr>
+                                            {% empty %}
+                                            <tr>
+                                                <td colspan="4" class="text-center text-danger">Aucun mutualiste trouvé.</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Tableau des prestations -->
+                            <div class="card mt-4 shadow-lg">
+                                <div class="card-header bg-success text-white">Liste des Prestations</div>
+                                <div class="card-body">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Nom</th>
+                                                <th>Description</th>
+                                                <th>Montant</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for prestation in prestations %}
+                                            <tr>
+                                                <td>{{ prestation.nom }}</td>
+                                                <td>{{ prestation.description }}</td>
+                                                <td>{{ prestation.montant }} FCFA</td>
+                                            </tr>
+                                            {% empty %}
+                                            <tr>
+                                                <td colspan="3" class="text-center text-danger">Aucune prestation disponible.</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

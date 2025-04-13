@@ -1,0 +1,119 @@
+{% extends 'frontoffice/base front.html' %}
+
+{% block content %}
+<div class="single-pro-review-area mt-t-30 mg-b-15"> 
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="product-payment-inner-st">
+                    <h1>Ajouter des Examens à la Prise en Charge : {{ prise_en_charge }}</h1>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <!-- Affichage des erreurs éventuelles -->
+                        {% if formset.errors %}
+                            <div class="alert alert-danger">
+                                <strong>Erreurs :</strong>
+                                <ul>
+                                    {% for error in formset.non_form_errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                        
+                        {% if messages %}
+                        <div class="alert alert-danger">
+                            <ul>
+                                {% for message in messages %}
+                                <li>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+
+                        <!-- Formulaire pour les examens médicaux -->
+                        <h3>Examens Médicaux</h3>
+                        {{ formset.management_form }}
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Type d'examen</th>
+                                    <th>Résultat (texte)</th>
+                                    <th>Fichier</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="examens-body">
+                                {% for form in formset %}
+                                <tr class="examen-form">
+                                    <td>{{ form.type_examen }}</td>
+                                    <td>{{ form.resultat_texte }}</td>
+                                    <td>{{ form.fichier_resultat }}</td>
+                                    <td>
+                                        {% if form.instance.pk %}
+                                        <input type="checkbox" name="{{ form.DELETE.html_name }}" class="form-check-input"> Supprimer
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>                            
+                        </table>
+                        <button type="button" class="btn btn-success" onclick="addForm()">Ajouter un Examen</button>
+
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+                            <button type="submit" class="btn btn-primary waves-effect waves-light">Enregistrer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Importation de Select2 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        $('.select2').select2({
+            placeholder: "Recherchez et sélectionnez...",
+            allowClear: true
+        });
+    });
+    
+    // Fonction pour ajouter un nouvel examen dynamiquement
+    function addForm() {
+        const formsetPrefix = "{{ formset.prefix }}";
+        const totalForms = document.getElementById("id_" + formsetPrefix + "-TOTAL_FORMS");
+        const maxForms = document.getElementById("id_" + formsetPrefix + "-MAX_NUM_FORMS");
+        const tableBody = document.getElementById("examens-body");
+    
+        if (totalForms && tableBody) {
+            const total = parseInt(totalForms.value);
+            const max = maxForms ? parseInt(maxForms.value) : 1000;
+    
+            if (total < max) {
+                let emptyFormHtml = "{{ formset.empty_form.as_p|escapejs }}";
+                emptyFormHtml = emptyFormHtml.replace(/__prefix__/g, total);
+                const newRow = document.createElement("tr");
+                newRow.classList.add("examen-form");
+                newRow.innerHTML = emptyFormHtml;
+                tableBody.appendChild(newRow);
+                totalForms.value = total + 1;
+    
+                // Activer Select2 pour le nouveau champ ajouté
+                $(newRow).find('.select2').select2({
+                    placeholder: "Recherchez et sélectionnez...",
+                    allowClear: true
+                });
+            } else {
+                alert("Vous avez atteint le nombre maximum d'examens.");
+            }
+        }
+    }
+    
+</script>
+
+{% endblock content %}

@@ -1,0 +1,40 @@
+{% extends 'frontoffice/base front.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Liste des Factures</h2>
+    <table id="example1" class="table">
+        <thead>
+            <tr>
+                <th>Numéro</th>
+                <th>Intitulé</th>
+                <th>Date Émission</th>
+                <th>total_mutualiste</th>
+                <th>total_mutuelle</th>
+                <th>total_general</th>
+                <th>Statut</th>
+                <th>Actions</th> 
+            </tr>
+        </thead>
+        <tbody>
+            {% for facture in factures %}
+            <tr>
+                <td>{{ facture.numero_facture }}</td>
+                <td>{{ facture.intitule_facture }}</td>
+                <td>{{ facture.date_emission|date:"d/m/Y" }}</td>
+                <td>{{ facture.total_mutualiste }}</td>
+                <td>{{ facture.total_mutuelle }}</td>
+                <td>{{ facture.total_general }}</td>
+                <td>{{ facture.get_statut_display }}</td>
+                <td>
+                    <a href="{% url 'detail_facture' facture.id %}">Détails</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">Aucune facture disponible.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div></br>
+{% endblock %}

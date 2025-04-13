@@ -1,0 +1,93 @@
+{% extends 'frontoffice/base front.html' %}
+
+{% block content %}
+<div class="az-content az-content-profile">
+    <div class="container mn-ht-100p">        
+        <div class="az-content-left az-content-left-profile">
+            <div class="az-profile-overview">
+                <div class="d-flex flex-wrap justify-content-between gap-3">
+        
+                    <!-- Total Prises en Charge -->
+                    <div class="card text-white bg-primary shadow-sm" style="flex: 1; min-width: 250px;">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Total Prises en Charge</h5>
+                            <p class="card-text display-5 fw-bold">{{ total_prises_en_charge }}</p>
+                        </div>
+                    </div>
+        
+                    <!-- Total Prestations Validées -->
+                    <div class="card text-white bg-success shadow-sm" style="flex: 1; min-width: 250px;">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Prestations Validées</h5>
+                            <p class="card-text display-5 fw-bold">{{ total_prestationsvalide }}</p>
+                        </div> 
+                    </div>
+        
+                    <!-- Total Prestations Non Validées -->
+                    <div class="card text-white bg-danger shadow-sm" style="flex: 1; min-width: 250px;">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Prestations Non Validées</h5>
+                            <p class="card-text display-5 fw-bold">{{ total_prestationsnonvalide }}</p>
+                        </div>
+                    </div>
+        
+                    <!-- Montant Total des Prestations -->
+                    <div class="card text-white bg-warning shadow-sm" style="flex: 1; min-width: 250px;">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Montant Total des Prestations</h5>
+                            <p class="card-text display-5 fw-bold">{{ montant_total_prestations }} FCFA</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="az-content-body pd-lg-l-40 d-flex flex-column">
+            <div class="az-content-breadcrumb">
+                <span>Mutualiste</span>
+                <span>Prestations</span>
+                <span>Liste</span>
+            </div>
+            <h2 class="az-content-title">Liste des Prestations</h2>
+
+            <div class="az-content-label mg-b-5">Historique des Prestations</div>
+            <p class="mg-b-20">Liste des prestations effectuées</p>
+            
+            <div>
+                <table id="example1" class="table">
+                    <thead>
+                        <tr>
+                            <th class="wd-10p">Numéro Dossier</th>
+                            <th class="wd-25p">Patient</th>
+                            <th class="wd-25p">Prestation</th>
+                            <th>Date Prestation</th>
+                            <th>Montant Total</th>
+                            <th>Montant Pris en Charge</th>
+                            <th>Montant Modérateur</th>
+                            <th>Statut Validation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for prestation in prestations %}
+                        <tr>
+                            <td>{{ prestation.prise_en_charge.numero_dossier|default:"N/A" }}</td>
+                            <td>{{ prestation.prise_en_charge.mutualiste.nom }} {{ prestation.prise_en_charge.mutualiste.prenom }}</td>
+                            <td>{{ prestation.prestation|default:"Aucune description" }}</td>
+                            <td>{{ prestation.date_prestation|date:"d/m/Y H:i" }}</td>
+                            <td>{{ prestation.montant_total|default:"0" }} F</td>
+                            <td>{{ prestation.montant_pris_en_charge|default:"0" }} F</td>
+                            <td>{{ prestation.montant_moderateur|default:"-" }} F</td>
+                            <td>{{ prestation.statut_validation_html|safe }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="8" style="text-align: center;">Aucune prestation trouvée</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

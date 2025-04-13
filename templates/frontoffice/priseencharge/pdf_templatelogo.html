@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Prise en charge - PDF</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h2 { text-align: center; color: #072C84; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+        th { background-color: #072C84; color: white; }
+        .total { font-weight: bold; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header img { width: 100px; } /* Ajuste la taille du logo */
+        .header .mutuelle { font-size: 20px; font-weight: bold; color: #072C84; }
+        .footer { text-align: center; font-size: 12px; margin-top: 30px; }
+    </style>
+</head>
+<body>
+
+    <!-- ✅ En-tête -->
+    <div class="header">
+        <img src="{{ mutuelle_logo }}" alt="Logo Mutuelle">
+        <p class="mutuelle">{{ nom_mutuelle }}</p>
+        <p><strong>Centre de Santé :</strong> {{ prise_en_charge.centre.nom }}</p>
+        <p><strong>Date d'Impression :</strong> {{ date_impression }}</p>
+    </div>
+
+    <h2>Prise en Charge - {{ prise_en_charge.mutualiste.nom }} {{ prise_en_charge.mutualiste.prenom }}</h2>
+    <p><strong>Date :</strong> {{ prise_en_charge.date_prise_en_charge }}</p>
+    <p><strong>Durée de validité :</strong> {{ prise_en_charge.duree_validite }} jours</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Prestation</th>
+                <th>Montant total</th>
+                <th>Montant pris en charge</th>
+                <th>Montant ticket modérateur</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for prestation in prestations %}
+            <tr>
+                <td>{{ prestation.prestation.nom }}</td>
+                <td>{{ prestation.montant_total }} F</td>
+                <td>{{ prestation.montant_pris_en_charge }} F</td>
+                <td>{{ prestation.montant_moderateur }} F</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="3" class="total">Total des prises en charge</td>
+                <td class="total">{{ totalPrestations }} F</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="total">Total part Mutuelle</td>
+                <td class="total">{{ totalPartMutuelle }} F</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="total">Total part Mutualiste</td>
+                <td class="total">{{ totalPartMutualiste }} F</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="footer">
+        <p>Document généré automatiquement par le système de gestion de la mutuelle.</p>
+    </div>
+
+</body>
+</html>

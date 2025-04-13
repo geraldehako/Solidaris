@@ -1,0 +1,58 @@
+{% extends 'frontoffice/base front.html' %}
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="az-content az-content-profile">
+    <div class="container mn-ht-100p">
+        <div class="content-wrapper w-100">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                        <h2 class="mb-4">Dashboard Point Focal</h2>
+
+                             <!-- Tableau des mutualistes -->
+                             <div class="card mt-12 shadow-lg">
+                                <div class="card-header bg-success text-white">Liste des prestataires</div>
+                                <div class="card-body">
+                                    <table id="example1" class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>type</th>
+                                                <th>Prestataires</th>
+                                                <th>Téléphone</th>
+                                                <th>Ville</th>
+                                                <th>Statut</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for centre in centres %}
+                                            <tr>
+                                                <td>{{ centre.type }}</td>
+                                                <td>{{ centre.nom }}</td>
+                                                <td>{{ centre.telephone }}</td>
+                                                <td>{{ centre.adresse }}</td>
+                                                <td style="color: {% if centre.statut %}green{% else %}red{% endif %}; font-weight: bold;">
+                                                    {% if centre.statut %} Actif {% else %} Inactif {% endif %}
+                                                </td>
+                                            </tr>
+                                            {% empty %}
+                                            <tr>
+                                                <td colspan="4" class="text-center text-danger">Aucun prestation trouvé.</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- container -->
+    </div><!-- az-content -->
+</div>
+
+{% endblock %}

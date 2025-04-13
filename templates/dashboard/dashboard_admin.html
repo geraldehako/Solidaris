@@ -1,0 +1,130 @@
+{% extends 'backoffice/base back.html' %}
+
+{% block content %}
+<style>
+    .photo-thumbnail {
+        width: 20px;
+        height: 20px;
+        object-fit: cover; /* Maintient les proportions et évite les distorsions */
+        border-radius: 5px; /* Optionnel, pour des coins arrondis */
+    }
+    .table-project-n {
+        color: blue; /* Exemple de couleur */
+        font-weight: bold;
+    }
+    </style>
+<div class="data-table-area mg-b-15">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="sparkline13-list">
+                    <!-- Header Section -->
+                    <div class="sparkline13-hd">
+                        <div class="main-sparkline13-hd">
+                            <h1>📊 Tableau de Bord <span class="table-project-n"> Principal</span></h1></br></br>
+                        </div>
+                    </div>
+
+                    <!-- Content Section -->
+                    <div class="sparkline13-graph">
+
+
+                        <div class="row">
+                            <!-- Mutualistes -->
+                            <div class="col-md-4">
+                                <div class="card text-white bg-primary mb-3">
+                                    <div class="card-header">Mutualistes</div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ total_mutualistes }}</h5>
+                                        <p class="card-text">Total des mutualistes inscrits</p>
+                                        <p><strong>Nouveaux ce mois :</strong> {{ nouveaux_mutualistes }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Prestations -->
+                            <div class="col-md-4">
+                                <div class="card text-white bg-success mb-3">
+                                    <div class="card-header">Prestations de Santé</div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ total_prestations }}</h5>
+                                        <p class="card-text">Total des prestations enregistrées</p>
+                                        <p><strong>Ce mois :</strong> {{ prestations_mois }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Finances -->
+                            <div class="col-md-4">
+                                <div class="card text-white bg-warning mb-3">
+                                    <div class="card-header">Finances</div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ total_montant_prestations }} FCFA</h5>
+                                        <p class="card-text">Montant total des prestations</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Médicaments -->
+                            <div class="col-md-4">
+                                <div class="card text-white bg-info mb-3">
+                                    <div class="card-header">Médicaments</div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ total_medicaments }}</h5>
+                                        <p class="card-text">Nombre total de médicaments enregistrés</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Centres de Santé -->
+                            <div class="col-md-4">
+                                <div class="card text-white bg-danger mb-3">
+                                    <div class="card-header">Centres de Santé</div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ total_centres }}</h5>
+                                        <p class="card-text">Centres de santé partenaires</p>
+                                        <p><strong>Top actifs :</strong></p>
+                                        <ul>
+                                            {% for centre in centres_actifs %}
+                                                <li>{{ centre.nom }} - {{ centre.n_prestations }} prestations</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Utilisateurs -->
+                            <div class="col-md-4">
+                                <div class="card text-white bg-secondary mb-3">
+                                    <div class="card-header">Utilisateurs</div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ total_utilisateurs }}</h5>
+                                        <p class="card-text">Nombre total d'agents et administrateurs</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Demandes de prise en charge -->
+                            <div class="col-md-6">
+                                <div class="card text-white bg-dark mb-3">
+                                    <div class="card-header">Demandes de Prise en Charge</div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ total_demandes }}</h5>
+                                        <p class="card-text">Demandes enregistrées</p>
+                                        <p><strong>En attente :</strong> {{ demandes_en_attente }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

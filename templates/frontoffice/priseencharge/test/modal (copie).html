@@ -1,0 +1,67 @@
+
+<div class="modal d-block pos-static">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content modal-content-demo">
+      <div class="modal-header">
+        <h6 class="modal-title">Recherche Prise en Charge</h6>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h6>Why We Use Electoral College, Not Popular Vote</h6>
+        <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. </p>
+      </div><!-- modal-body -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-indigo">Save changes</button>
+        <button type="submit" class="btn btn-indigo">Rechercher</button>
+        <button type="button" class="btn btn-outline-light">Close</button>
+      </div>
+    </div>
+  </div><!-- modal-dialog -->
+</div><!-- modal -->
+<!-- modal.html -->
+<div class="modal" id="priseEnChargeModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Recherche Prise en Charge</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="formRechercheMatricule">
+            <input type="text" id="matricule" name="matricule" class="form-control" placeholder="Saisissez le matricule">
+            <button type="submit" class="btn btn-primary mt-3">Rechercher</button>
+          </form>
+          <div id="resultat"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    document.getElementById('formRechercheMatricule').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const matricule = document.getElementById('matricule').value;
+  
+      fetch(`/valider-matricule/?matricule=${matricule}`)
+        .then(response => response.json())
+        .then(data => {
+          const resultat = document.getElementById('resultat');
+          if (data.status === "success") {
+            resultat.innerHTML = `
+              <div class="card">
+                <img src="${data.data.photo || '/static/images/default-profile.png'}" class="card-img-top" alt="Photo">
+                <div class="card-body">
+                  <h5 class="card-title">${data.data.nom} ${data.data.prenom}</h5>
+                  <p class="card-text">Âge : ${data.data.age}</p>
+                  <a href="/ajouter-prestations/${data.id}" class="btn btn-success">Associer Prestations</a>
+                </div>
+              </div>
+            `;
+          } else {
+            resultat.innerHTML = `<p class="text-danger">${data.message}</p>`;
+          }
+        });
+    });
+  </script>

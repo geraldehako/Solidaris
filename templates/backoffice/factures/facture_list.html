@@ -1,0 +1,93 @@
+{% extends 'backoffice/base back.html' %}
+
+{% block content %}
+<style>
+    .photo-thumbnail {
+        width: 20px;
+        height: 20px;
+        object-fit: cover; /* Maintient les proportions et évite les distorsions */
+        border-radius: 5px; /* Optionnel, pour des coins arrondis */
+    }
+    .table-project-n {
+        color: blue; /* Exemple de couleur */
+        font-weight: bold;
+    }
+</style>
+<!-- Static Table Start -->
+<div class="data-table-area mg-b-15">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="sparkline13-list">
+                    <!-- Header Section -->
+                    <div class="sparkline13-hd">
+                        <div class="main-sparkline13-hd">
+                            <h1>Liste des <span class="table-project-n">factures</span> <span class="table-project-n">des prestataires</span></h1>
+                        </div>
+                    </div>
+
+                    <!-- Content Section -->
+                    <div class="sparkline13-graph">
+                        <h4></h4>
+                            <div class="add-product">
+                                
+                            </div></br>
+
+                        <div class="datatable-dashv1-list custom-datatable-overright">
+                            <div id="toolbar">
+                                <select class="form-control dt-tb">
+                                    <option value="">Export Basic</option> 
+                                    <option value="all">Export All</option>
+                                    <option value="selected">Export Selected</option>
+                                </select>
+                            </div>
+                            <table id="table" data-toggle="table" data-pagination="true" data-search="true" data-show-columns="true" data-show-pagination-switch="true" data-show-refresh="true" data-key-events="true" data-show-toggle="true" data-resizable="true" data-cookie="true"
+                                data-cookie-id-table="saveId" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar">
+                                <thead>
+                                    <tr>
+                                        <th data-field="state" data-checkbox="true"></th>
+                                        <th data-field="Prestations" data-editable="true">Prestations</th>
+                                        <th data-field="Numéro" data-editable="true">Numéro</th>
+                                        <th data-field="Intitulé" data-editable="true">Intitulé</th>
+                                        <th data-field="Dated" data-editable="true">Date début</th>
+                                        <th data-field="Datef" data-editable="true">Date fin</th>
+                                        <th data-field="Totalmutualiste" data-editable="true">Total mutualiste </th>
+                                        <th data-field="Totalmutuelle" data-editable="true">Total mutuelle</th>
+                                        <th data-field="Total" data-editable="true">Total</th>
+                                        <th data-field="action">Statut</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for facture in factures %}
+                                    <tr>
+                                        <td></td>
+                                        <td>{{ facture.centre.nom }}</td>
+                                        <td>{{ facture.numero_facture }}</td>
+                                        <td>{{ facture.intitule_facture }}</td>
+                                        <td>{{ facture.date_debut }}</td>
+                                        <td>{{ facture.date_fin }}</td>
+                                        <td>{{ facture.total_mutualiste }} F CFA</td>
+                                        <td>{{ facture.total_mutuelle }} F CFA</td>
+                                        <td>{{ facture.total_general }} F CFA</td>
+                                        <td>
+                                            <a href="{% url 'toggle_factures_status' facture.id %}" class="text-decoration-none">
+                                                <i class="fa fa-spinner fa-pulse fa-1x fa-fw {% if facture.statut == 'payee' %}text-success{% else %}text-danger{% endif %}"></i>
+                                                {% if facture.statut == 'payee' %} Payée {% else %} Impayée {% endif %}
+                                            </a>
+                                        </td>                                        
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="6" class="text-center">Aucune facture impayée trouvée</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prestations par Mois</title>
+
+    <!-- Importation des styles -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Prestations par Mois</h2>
+
+        <!-- Sélecteur de date -->
+        <label for="date_selection">Sélectionnez une date :</label>
+        <input type="date" id="date_selection">
+        <a href="{% url 'prestations_pdf' %}" class="btn btn-primary btn-pdf" target="_blank">
+            Télécharger le PDF
+        </a>
+      
+
+        <!-- Tableaux pour afficher les prestations -->
+        <h3>Hospitalisation</h3>
+        <table id="table_hospitalisation" class="display">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                    <th>Montant</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <h3>Optique</h3>
+        <table id="table_optique" class="display">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                    <th>Montant</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <h3>Autres</h3>
+        <table id="table_autres" class="display">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                    <th>Montant</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <h3>Pharmacie</h3>
+        <table id="table_pharmacie" class="display">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                    <th>Montant</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!-- Script pour récupérer les données depuis Django -->
+    <script>
+        $(document).ready(function () {
+            $("table").DataTable();  // Initialisation des tables DataTables
+
+            // Fonction pour charger les données
+            function loadData(date) {
+                $.ajax({
+                    url: "{% url 'prestations_par_mois' %}",  // Vue Django
+                    type: "GET",
+                    data: { date: date },
+                    success: function (response) {
+                        // Mise à jour des tables avec les données reçues
+                        updateTable("#table_hospitalisation", response.hospitalisation);
+                        updateTable("#table_optique", response.optique);
+                        updateTable("#table_autres", response.autres);
+                        updateTable("#table_pharmacie", response.pharmacie);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Erreur lors du chargement des données :", error);
+                    }
+                });
+            }
+
+            // Fonction pour mettre à jour les tables
+            function updateTable(tableId, data) {
+                let table = $(tableId).DataTable();
+                table.clear(); // Supprimer les anciennes données
+
+                data.forEach(item => {
+                    console.log("Données reçues :", item);  // Vérifie les champs dans la console
+
+                    table.row.add([
+                        item.id, 
+                        item.centre_sante_id, 
+                        item.date_prestation, 
+                        item.montant_total
+                    ]);
+                });
+
+                table.draw(); // Rafraîchir la table avec les nouvelles données
+            }
+
+            // Événement sur le changement de date
+            $("#date_selection").change(function () {
+                let selectedDate = $(this).val();
+                if (selectedDate) {
+                    loadData(selectedDate);
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            // Mise à jour dynamique du lien de téléchargement du PDF
+            $("#date_selection").change(function () {
+                let selectedDate = $(this).val();
+                let pdfLink = "{% url 'prestations_pdf' %}?date=" + selectedDate;
+                $(".btn-pdf").attr("href", pdfLink);
+            });
+        });
+    </script>
+    
+
+</body>
+</html>

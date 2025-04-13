@@ -1,0 +1,20 @@
+<!-- ajouter_prestations.html -->
+<h3>Associer des Prestations</h3>
+<div>
+  <p>Mutualiste : {{ mutualiste.nom }} {{ mutualiste.prenom }}</p>
+  <p>Âge : {{ mutualiste.age }}</p>
+</div>
+<form method="post">
+  {% csrf_token %}
+  <ul>
+    {% for prestation in prestations %}
+    <li>
+      <label>
+        <input type="checkbox" name="prestations" value="{{ prestation.id }}">
+        {{ prestation.libelle }} ({{ prestation.montant }} F CFA)
+      </label>
+    </li>
+    {% endfor %}
+  </ul>
+  <button type="submit" class="btn btn-primary">Sousmettre</button>
+</form>

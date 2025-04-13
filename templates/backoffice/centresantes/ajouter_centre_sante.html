@@ -1,0 +1,112 @@
+{% extends 'backoffice/base back.html' %}
+
+{% block content %}
+<style>
+    .table-project-n {
+        color: blue; /* Exemple de couleur */
+        font-weight: bold;
+    }
+    
+    /* Cache les cases à cocher générées par le formset */
+    input[type="checkbox"][name$="-DELETE"] {
+        display: none;
+    }
+</style>
+    
+    <!-- Single pro tab review Start-->
+<div class="single-pro-review-area mt-t-30 mg-b-15">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="product-payment-inner-st">
+                    <h1>Formulaire pour enregistrer un <span class="table-project-n"> prestataire</span></h1>
+                        <br>
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12"> 
+                                            <div class="form-group">
+                                                {{ form.nom.label_tag }} {{ form.nom }}
+                                            </div>
+                                            <div class="form-group">
+                                                {{ form.type.label_tag }} {{ form.type }}
+                                            </div>
+                                            <div class="form-group">
+                                                {{ form.adresse.label_tag }} {{ form.adresse }}
+                                            </div>
+                                        </div>
+                                                            
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <div class="form-group">
+                                                {{ form.telephone.label_tag }} {{ form.telephone }}
+                                            </div>
+                                            <div class="form-group">
+                                                {{ form.email.label_tag }} {{ form.email }} 
+                                            </div>
+                                            <div class="form-group">
+                                                {{ form.groupe.label_tag }} {{ form.groupe }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+
+                            <!-- Filtres pour les prestations -->
+                            </br></br><div class="form-group">
+                                <label for="categorie">Filtrer par Catégorie</label>
+                                <select id="categorie" class="form-control">
+                                    <option value="">Toutes les catégories</option>
+                                    {% for key, value in categories_prestation %}
+                                        <option value="{{ key }}">{{ value }}</option>
+                                    {% endfor %}
+                                </select> 
+                            </div>
+                                    
+                            <div class="form-group">
+                                <label for="recherche">Rechercher une prestation</label>
+                                <input type="text" id="recherche" class="form-control" placeholder="Saisir une description">
+                            </div>
+
+                            <!-- Liste des prestations -->
+                            <div id="prestations-list">
+                                {% include 'backoffice/centresantes/prestations_partials.html' with prestations=form.fields.prestations.queryset %}
+                            </div>
+
+                            <!-- Bouton de soumission -->
+                            </br><button type="submit" class="btn btn-primary">Enregistrer</button>
+                        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const categorieFilter = document.getElementById('categorie');
+        const searchInput = document.getElementById('recherche');
+        const prestationsList = document.getElementById('prestations-list');
+
+        // Fonction pour charger les prestations filtrées
+        function fetchPrestations() {
+            const categorie = categorieFilter.value;
+            const recherche = searchInput.value;
+
+            fetch(`/filtrer_prestations/?categorie=${categorie}&recherche=${recherche}`)
+                .then(response => response.json())
+                .then(data => {
+                    prestationsList.innerHTML = data.html;
+                })
+                .catch(error => console.error('Erreur:', error));
+        }
+
+        // Événements déclencheurs
+        categorieFilter.addEventListener('change', fetchPrestations);
+        searchInput.addEventListener('input', fetchPrestations);
+    });
+</script>
+
+{% endblock %}

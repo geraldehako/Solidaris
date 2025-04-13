@@ -1,0 +1,38 @@
+{% extends 'frontoffice/base front login.html' %}
+
+{% block content %}
+<div class="az-signin-wrapper">
+    <div class="az-card-signin">
+        <h1 class="az-logo">az<span>i</span>a</h1>
+        <div class="az-signin-header">
+            <h2>Welcome back!</h2>
+            <h4>Please sign in to continue</h4>
+
+            {% if messages %}
+                <div class="alert alert-danger" role="alert">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="username">Email</label>
+                    <input type="text" class="form-control" name="username" id="username" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password-addon">Password</label>
+                    <input type="password" class="form-control" name="password" id="password-addon" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn btn-az-primary btn-block">Sign In</button>
+            </form>
+        </div><!-- az-signin-header -->
+        <div class="az-signin-footer">
+            <p><a href="">Forgot password?</a></p>
+            <p>Don't have an account? <a href="">Create an Account</a></p>
+        </div><!-- az-signin-footer -->
+    </div><!-- az-card-signin -->
+</div><!-- az-signin-wrapper -->
+{% endblock content %}

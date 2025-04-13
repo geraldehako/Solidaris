@@ -1,0 +1,58 @@
+{% extends "backoffice/base back.html" %}
+
+{% block content %}
+<style>
+    .photo-thumbnail {
+        width: 20px;
+        height: 20px;
+        object-fit: cover; /* Maintient les proportions et évite les distorsions */
+        border-radius: 5px; /* Optionnel, pour des coins arrondis */
+    }
+    .table-project-n {
+        color: blue; /* Exemple de couleur */
+        font-weight: bold;
+    }
+</style>
+<!-- Static Table Start -->
+<div class="data-table-area mg-b-15">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="sparkline13-list">
+                    <!-- Header Section -->
+                    <div class="sparkline13-hd">
+                        <div class="main-sparkline13-hd">
+                            <h1>Formulaire d'importation des <span class="table-project-n">Prestataires de la mutuelle</span></h1>
+                        </div>
+                    </div>
+                    
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="file">Fichier Excel :</label>
+                            <input type="file" id="fichier_excel" name="fichier_excel" accept=".xlsx, .xls" class="form-control">
+                        </div>
+                        
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+                            <div class="btn-group btn-custom-groups">
+                                <button type="submit" class="btn btn-success"><i class="fa fa-check-circle" aria-hidden="true"></i>   Importer</button>
+                                <a type="button" class="btn btn-primary" href="{% url 'liste_centre_sante' %}"><i class="fa fa-reply-all" aria-hidden="true"></i>   Retour à la liste</a>
+                            </div>
+                        </div> 
+                    </form>
+
+                    {% if messages %}
+                    <div class="mt-4">
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,65 @@
+<div class="tx-center pd-y-20 bg-gray-200">
+  <a href="{% url 'prise_en_charge' %}" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modaldemo3">Démarrer une prise en charge</a>
+</div>
+
+<!-- MODAL -->
+<div id="modaldemo3" class="modal">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content modal-content-demo">
+      <div class="modal-header">
+        <h6 class="modal-title">Recherche du Mutualiste ou Bénéficiaire</h6>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="formRechercheMatricule">
+          <input type="text" id="matricule" name="matricule" class="form-control" placeholder="Saisissez le matricule">
+          <button type="submit" class="btn btn-primary mt-3">Rechercher</button>
+        </form>
+        <div id="resultat" class="mt-4"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-bs-dismiss="modal" class="btn btn-outline-light">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.getElementById('formRechercheMatricule').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const matricule = document.getElementById('matricule').value.trim();
+
+    if (!matricule) {
+      alert('Veuillez entrer un matricule valide.');
+      return;
+    }
+
+    fetch(`/valider-matricule/?matricule=${matricule}`)
+      .then(response => {
+        if (!response.ok) throw new Error('Erreur serveur');
+        return response.json();
+      })
+      .then(data => {
+        const resultat = document.getElementById('resultat');
+        if (data.status === "success") {
+          resultat.innerHTML = `
+            <div class="card">
+              <img src="${data.data.photo || '/static/images/default-profile.png'}" class="card-img-top" alt="Photo">
+              <div class="card-body">
+                <h5 class="card-title">${data.data.nom} ${data.data.prenom}</h5>
+                <p class="card-text">Âge : ${data.data.age}</p>
+                <a href="/ajouter-prestations/${data.id}" class="btn btn-success">Associer Prestations</a>
+              </div>
+            </div>
+          `;
+        } else {
+          resultat.innerHTML = `<p class="text-danger">${data.message}</p>`;
+        }
+      })
+      .catch(error => {
+        document.getElementById('resultat').innerHTML = `<p class="text-danger">Une erreur est survenue : ${error.message}</p>`;
+      });
+  });
+</script>

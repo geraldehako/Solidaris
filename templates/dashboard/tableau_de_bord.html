@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard">
+    <h1>Tableau de Bord</h1>
+    <h2>Bienvenue, {{ user.username }}!</h2>
+
+    <h3>Actions Disponibles</h3>
+    <ul>
+        {% for titre, lien in actions.items %}
+        <li><a href="{{ lien }}">{{ titre }}</a></li>
+        {% endfor %}
+    </ul>
+
+    <h3>Statistiques</h3>
+    <ul>
+        {% for titre, valeur in stats.items %}
+        <li>{{ titre }} : {{ valeur }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

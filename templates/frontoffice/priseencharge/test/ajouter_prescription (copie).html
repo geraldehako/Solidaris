@@ -1,0 +1,83 @@
+{% extends 'frontoffice/base front.html' %}
+
+{% block content %}
+<h2>Ajouter une Prescription</h2>
+
+<form method="post">
+    {% csrf_token %}
+    
+    <label for="medicament">Médicament:</label>
+    <select id="medicament" class="medicament-select">
+        <option value="">-- Sélectionner un médicament --</option>
+        {% for med in form.medicament.field.queryset %}
+            <option value="{{ med.id }}">{{ med.nom }}</option>
+        {% endfor %}
+    </select>
+
+    <input type="number" id="quantite" placeholder="Quantité" min="1" value="1">
+    <input type="text" id="posologie" placeholder="Posologie">
+    
+    <label for="substitution_possible">Substitution possible :</label>
+    <input type="checkbox" id="substitution_possible">
+
+    <button type="button" id="ajouterMedicament">Ajouter Médicament</button>
+
+    <table border="1" id="medicamentsTable">
+        <thead>
+            <tr>
+                <th>Médicament</th>
+                <th>Quantité</th>
+                <th>Posologie</th>
+                <th>Substitution</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <br>
+
+    <!-- Champs cachés pour envoyer les informations des médicaments -->
+    <div id="medicamentsFields"></div>  <!-- Ceci sera rempli dynamiquement -->
+
+    <button type="submit">Ajouter Prescription</button>
+</form>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $("#ajouterMedicament").click(function(){
+            let selectedMed = $("#medicament option:selected");
+            let medId = selectedMed.val();
+            let medName = selectedMed.text();
+            let quantite = $("#quantite").val();
+            let posologie = $("#posologie").val();
+            let substitution = $("#substitution_possible").prop("checked") ? "Oui" : "Non";
+    
+            // Vérifie si le médicament a déjà été ajouté
+            if (medId && quantite > 0 && posologie.trim() !== "") {
+                if ($("#medicamentsTable tbody").find(`[data-id='${medId}']`).length === 0) {
+                    // Ajout du médicament à la table avec un ID unique
+                    $("#medicamentsTable tbody").append(`
+                        <tr data-id="${medId}">
+                            <td>${medName} <input type="hidden" name="medicaments[${medId}][medicament]" value="${medId}"></td>
+                            <td><input type="number" name="medicaments[${medId}][quantite]" value="${quantite}" min="1"></td>
+                            <td><input type="text" name="medicaments[${medId}][posologie]" value="${posologie}"></td>
+                            <td>${substitution} <input type="hidden" name="medicaments[${medId}][substitution]" value="${substitution}"></td>
+                            <td><button type="button" class="removeMed">X</button></td>
+                        </tr>
+                    `);
+                }
+            } else {
+                alert("Veuillez remplir tous les champs.");
+            }
+        });
+    
+        $(document).on("click", ".removeMed", function(){
+            $(this).closest("tr").remove();
+        });
+    });
+    
+</script>
+
+{% endblock content %}

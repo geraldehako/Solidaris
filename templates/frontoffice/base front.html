@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+  <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90680653-2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-90680653-2');
+    </script>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Meta -->
+    <meta name="description" content="Responsive Bootstrap 4 Dashboard Template">
+    <meta name="author" content="BootstrapDash">
+
+    <title>Solidaris+</title>
+
+    <!-- vendor css -->
+    <link href="{% static 'frontoffice/lib/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
+    <link href="{% static 'frontoffice/lib/ionicons/css/ionicons.min.css' %}" rel="stylesheet">
+    <link href="{% static 'frontoffice/lib/typicons.font/typicons.css' %}" rel="stylesheet">
+    <link href="{% static 'frontoffice/lib/flag-icon-css/css/flag-icon.min.css' %}" rel="stylesheet">
+    <link href="{% static 'frontoffice/lib/datatables.net-dt/css/jquery.dataTables.min.css' %}" rel="stylesheet">
+    <link href="{% static 'frontoffice/lib/datatables.net-responsive-dt/css/responsive.dataTables.min.css' %}" rel="stylesheet">
+    <link href="{% static 'frontoffice/lib/select2/css/select2.min.css' %}" rel="stylesheet">
+    <link href="{% static 'frontoffice/lib/fullcalendar/fullcalendar.min.css' %}" rel="stylesheet">
+
+    <!-- azia CSS -->
+    <link rel="stylesheet" href="{% static 'frontoffice/css/azia.css' %}">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+
+  </head>
+  <body>
+
+    <div class="az-header">
+      <div class="container">
+        <div class="az-header-left">
+          <a href="index.html" class="az-logo"><span></span> Solidaris+</a>
+          <a href="" id="azMenuShow" class="az-header-menu-icon d-lg-none"><span></span></a>
+        </div><!-- az-header-left -->
+        <div class="az-header-menu">
+          <div class="az-header-menu-header">
+            <a href="index.html" class="az-logo"><span></span> Solidaris+</a>
+            <a href="" class="close">&times;</a>
+          </div><!-- az-header-menu-header -->
+        
+          <ul class="nav">
+                {% if user.is_authenticated %}
+                <li class="nav-item active show">
+                  {% if user.role == 'administrateur' %}
+                      <a href="{% url 'dashboard_centre_sante' %}" class="nav-link">
+                          <i class="typcn typcn-heart-outline"></i> Tableau de bord Centre Santé
+                      </a>
+                      <a href="{% url 'tableau_de_bord_pharmacie' %}" class="nav-link">
+                          <i class="typcn typcn-mortar-board"></i> Tableau de bord Pharmacie
+                      </a>
+                      <a href="{% url 'dashboard_point_focal' %}" class="nav-link">
+                          <i class="typcn typcn-user-outline"></i> Tableau de bord Point Focal
+                      </a>
+                  {% elif user.role == 'centre_sante' %}
+                      <a href="{% url 'dashboard_centre_sante' %}" class="nav-link">
+                          <i class="typcn typcn-heart-outline"></i> Tableau de bord
+                      </a>
+                  {% elif user.role == 'pharmacie' %}
+                      <a href="{% url 'tableau_de_bord_pharmacie' %}" class="nav-link">
+                          <i class="typcn typcn-mortar-board"></i> Tableau de bord
+                      </a>
+                  {% elif user.role == 'point_focal' %}
+                      <a href="{% url 'dashboard_point_focal' %}" class="nav-link">
+                          <i class="typcn typcn-user-outline"></i> Tableau de bord
+                      </a>
+                  {% elif user.role == 'medecin_conseil' %}
+                      <a href="{% url 'dashboard_medecin' %}" class="nav-link">
+                          <i class="typcn typcn-user-outline"></i> Tableau de bord
+                      </a>
+                  {% endif %}
+                </li>
+                {% endif %}
+        
+              <!-- Prises en charge médicales -->
+              {% if user.is_authenticated %}
+              <li class="nav-item">
+                <a href="" class="nav-link with-sub"><i class="typcn typcn-document"></i> Prises en charge médicales</a>
+                <nav class="az-menu-sub">
+                  {% if user.role in 'administrateur,centre_sante' %}
+                      <a href="{% url 'listedetail_prestations' %}" class="nav-link">
+                          <i class="typcn typcn-clipboard"></i> Détails des prises en charge traitées
+                      </a>
+                      <a href="#modaldemo3" class="nav-link" data-bs-toggle="modal">
+                          <i class="typcn typcn-user-add"></i> Nouvelle Prise en charge
+                      </a>
+                      <a href="#modaldemo4" class="nav-link" data-bs-toggle="modal">
+                          <i class="typcn typcn-home-outline"></i> Hospitalisation
+                      </a>
+                      <a href="{% url 'liste_factures' %}" class="nav-link">
+                          <i class="typcn typcn-document-text"></i> Facturation
+                      </a>
+                  {% endif %}
+                     
+                  {% if user.role in 'administrateur,pharmacie' %}
+                      <a href="{% url 'listedetail_prestationspharma' %}" class="nav-link">
+                          <i class="typcn typcn-clipboard"></i> Détails des prises en charge traitées
+                      </a>
+                      <a href="#modaldemo5" class="nav-link" data-bs-toggle="modal">
+                          <i class="typcn typcn-puzzle-outline"></i> Dispensation
+                      </a>
+                      <a href="{% url 'liste_facturespharmacie' %}" class="nav-link">
+                          <i class="typcn typcn-document-text"></i> Facturation
+                      </a>
+                  {% endif %}
+
+        
+                  {% if user.role in 'administrateur,lunetterie' %}
+                      <a href="{% url 'listedetail_prestations' %}" class="nav-link">
+                          <i class="typcn typcn-eye-outline"></i> Détails des prises en charge traitées
+                      </a>
+                      <a href="#modaldemo6" class="nav-link" data-bs-toggle="modal">
+                          <i class="typcn typcn-shopping-cart"></i> Ventes
+                      </a>
+                      <a href="{% url 'liste_facturespharmacie' %}" class="nav-link">
+                          <i class="typcn typcn-document-text"></i> Facturation
+                      </a>
+                  {% endif %}
+
+                  {% if user.role in 'administrateur,point_focal' %}
+                      <a href="{% url 'point_focal_prestations' %}" class="nav-link">
+                          <i class="typcn typcn-heart-outline"></i> Détails des prises en charge médicales traitées
+                      </a>
+                      <a href="{% url 'point_focal_dispensations' %}" class="nav-link">
+                          <i class="typcn typcn-pills"></i> Détails des prises en charge Dispensation traitées
+                      </a>
+                      <a href="{% url 'point_focal_cotisations' %}" class="nav-link">
+                          <i class="typcn typcn-credit-card"></i> État des cotisations
+                      </a>
+                  {% endif %}
+                  {% if user.role in 'administrateur,medecin_conseil' %}
+                    <a href="{% url 'liste_validations' %}" class="nav-link">
+                      <i class="typcn typcn-eye-outline"></i> Détails des prises en charge traitées
+                    </a>
+                  {% endif %}
+                </nav>
+                {% endif %}
+              </li>
+        
+              <!-- Conseils médicaux -->
+              {% if user.role in 'administrateur,medecin_conseil' %}
+                <li class="nav-item">
+                  <a href="#" class="nav-link with-sub">
+                      <i class="typcn typcn-document"></i> Conseils médicaux
+                  </a>
+                  <nav class="az-menu-sub">
+                      <a href="{% url 'liste_validations' %}" class="nav-link">
+                          <i class="typcn typcn-eye-outline"></i> Détails des prises en charge traitées
+                      </a>
+                  </nav>
+                </li>
+            
+              {% endif %}
+        
+              <!-- Forms -->
+              {% if user.role in 'administrateur,point_focal' %}
+                  <li class="nav-item">
+                      <a href="{% url 'point_focal_mutualiste' %}" class="nav-link">
+                          <i class="typcn typcn-group-outline"></i> Mutualistes
+                      </a>
+                  </li>
+                  <li class="nav-item">
+                      <a href="{% url 'point_focal_prestataire' %}" class="nav-link">
+                          <i class="typcn typcn-briefcase"></i> Prestataires
+                      </a>
+                  </li>
+              {% endif %}
+          </ul>
+        </div><!-- az-header-menu -->
+        
+        <div class="az-header-right">
+          <a href="https://www.bootstrapdash.com/demo/azia-free/docs/documentation.html" target="_blank" class="az-header-search-link"><i class="far fa-file-alt"></i></a>        
+
+          <div class="dropdown az-header-notification">
+              <a href="#" class="new"><i class="typcn typcn-bell"></i></a>
+              <div class="dropdown-menu">
+                  <div class="az-dropdown-header mg-b-20 d-sm-none">
+                      <a href="#" class="az-header-arrow"><i class="icon ion-md-arrow-back"></i></a>
+                  </div>
+                  <h6 class="az-notification-title">Notifications</h6>
+                  <p class="az-notification-text">Vous avez {{ messageprestation|length }} nouvelles notifications</p>
+
+                  <div class="az-notification-list">
+                    {% if messageprestation %}
+                      {% for mess in messageprestation %}
+                          <div class="media new">
+                              <div class="az-img-user online">
+                                  <img src="{% static 'img/faces/face3.jpg' %}" alt="">
+                              </div>
+                              <div class="media-body">
+                                  <p><strong>{{ mess.prise_en_charge.mutualiste }}</strong> - {{ mess.prestation }}</p>
+                                  <span style="color: {% if mess.statut_validation %}green{% else %}red{% endif %}; font-weight: bold;">
+                                      {% if mess.statut_validation %}
+                                          Validée
+                                      {% else %}
+                                          Refusée
+                                      {% endif %}
+                                  </span>
+                              </div>
+                          </div>
+                      {% endfor %}
+                    {% else %}
+                        <p class="text-center">Aucune nouvelle notification</p>
+                    {% endif %}                
+                  </div>
+                  
+                  <div class="dropdown-footer">
+                      <a href="#">Voir toutes les notifications</a>
+                  </div>
+              </div>
+          </div>
+
+          <div class="dropdown az-profile-menu">
+            <a href="" class="az-img-user"><img src="{% static 'img/faces/face1.jpg' %}" alt=""></a>
+            <div class="dropdown-menu">
+              <div class="az-dropdown-header d-sm-none">
+                <a href="" class="az-header-arrow"><i class="icon ion-md-arrow-back"></i></a>
+              </div>
+              <div class="az-header-profile">
+                {% if user.is_authenticated %}
+                  {% csrf_token %}
+                <div class="az-img-user">
+                  <img src="../img/faces/face1.jpg" alt=""> 
+                </div><!-- az-img-user -->
+                <h6>{{ user.username }}</h6>
+                <span>{{ user.role }} de {{ user.groupe }}</span>
+                {% endif %}
+              </div><!-- az-header-profile -->
+
+              <a href="{% url 'signup' %}" class="dropdown-item"><i class="typcn typcn-power-outline"></i> Se déconnecter</a>
+            </div><!-- dropdown-menu -->
+          </div>
+        </div><!-- az-header-right -->
+      </div><!-- container -->
+    </div><!-- az-header -->
+
+    
+
+
+                                    {% block content %}{% endblock content %}
+                
+                
+
+          
+                        
+                                    <div class="az-footer ht-40">
+                                      <div class="container ht-100p pd-t-0-f">
+                                        <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">
+                                          Copyright © <span id="year"></span>. Tous droits réservés. Modèle créé par <a href="">GéraldEhako</a></p>
+                                        </span>
+                                        <!--<span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">
+                                          Free <a href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">
+                                            Bootstrap admin templates
+                                          </a> from Bootstrapdash.com
+                                        </span>container -->
+                                      </div> 
+                                    </div><!-- az-footer -->
+                                    
+                                    <!-- Script pour insérer l'année actuelle -->
+                                    <script>
+                                      document.getElementById("year").textContent = new Date().getFullYear();
+                                    </script>
+                                    
+
+                            <!-- Modal pour la prise en charge -->
+                            <div id="modaldemo3" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalPriseEnCharge" aria-hidden="true">
+                              <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="modalPriseEnCharge">Prise en charge</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <form id="formRechercheMatricule">
+                                      <div class="mb-3">
+                                        <label for="matricule" class="form-label">Saisissez le matricule</label>
+                                        <input type="text" id="matricule" name="matricule" class="form-control" placeholder="Exemple : MUT12345">
+                                      </div>
+                                      <button type="submit" class="btn btn-primary">Rechercher</button>
+                                    </form>
+                                    <div id="resultat" class="mt-4"></div>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <!-- Modal pour la prise en charge -->
+                            <div id="modaldemo4" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalPriseEnCharge" aria-hidden="true">
+                              <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="modalPriseEnChargehospi">Hospi</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <form id="formRechercheMatriculehospi">
+                                      <div class="mb-3">
+                                        <label for="matricule" class="form-label">Saisissez le matricule</label>
+                                        <input type="text" id="matriculehospi" name="matricule" class="form-control" placeholder="Exemple : MUT12345">
+                                      </div>
+                                      <button type="submit" class="btn btn-primary">Rechercher</button>
+                                    </form>
+                                    <div id="resultathospi" class="mt-4"></div>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <!-- Modal pour la dispensation -->
+                            <!-- Modal pour la dispensation -->
+                            <div id="modaldemo5" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalDispensation" aria-hidden="true">
+                              <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="modalDispensation">Dispensation</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <form id="formRechercheCodedisp">
+                                      <div class="mb-3">
+                                        <label for="matriculedisp" class="form-label">Saisissez le code prescription</label>
+                                        <input type="text" id="matriculedisp" name="matricule" class="form-control" placeholder="Exemple : MUT12345" required>
+                                      </div>
+                                      <button type="submit" class="btn btn-primary">Rechercher</button>
+                                    </form>
+                                    <div id="resultatdisp" class="mt-4"></div>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <!-- Modal pour la prise en charge optique-->
+                            <div id="modaldemo6" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalPriseEnChargeoptique" aria-hidden="true">
+                              <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="modalPriseEnChargeoptique">Prise en charge</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <form id="formRechercheMatriculeoptique">
+                                      <div class="mb-3">
+                                        <label for="matricule" class="form-label">Saisissez le matricule</label>
+                                        <input type="text" id="matriculeoptique" name="matricule" class="form-control" placeholder="Exemple : MUT12345">
+                                      </div>
+                                      <button type="submit" class="btn btn-primary">Rechercher</button>
+                                    </form>
+                                    <div id="resultatoptique" class="mt-4"></div>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+
+                        
+                            <script src="{% static 'frontoffice/lib/jquery/jquery.min.js' %}"></script>
+                            <script src="{% static 'frontoffice/lib/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+                            <script src="{% static 'frontoffice/lib/ionicons/ionicons.js' %}"></script>
+                            <script src="{% static 'frontoffice/lib/jquery.flot/jquery.flot.js' %}"></script>
+                            <script src="{% static 'frontoffice/lib/jquery.flot/jquery.flot.resize.js' %}"></script>
+                            <script src="{% static 'frontoffice/lib/chart.js/Chart.bundle.min.js' %}"></script>
+                            <script src="{% static 'frontoffice/lib/peity/jquery.peity.min.js' %}"></script>
+                        
+                            <script src="{% static 'frontoffice/js/azia.js' %}"></script>
+                            <script src="{% static 'frontoffice/js/chart.flot.sampledata.js' %}"></script>
+                            <script src="{% static 'frontoffice/js/dashboard.sampledata.js' %}"></script>
+                            <script src="{% static 'frontoffice/js/jquery.cookie.js' %}" type="text/javascript"></script>
+                            <script src="{% static 'frontoffice/lib/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+                            <script src="{% static 'frontoffice/lib/datatables.net-dt/js/dataTables.dataTables.min.js' %}"></script>
+                            <script src="{% static 'frontoffice/lib/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
+                            <script src="{% static 'frontoffice/lib/datatables.net-responsive-dt/js/responsive.dataTables.min.js' %}"></script>
+                            <script src="{% static 'frontoffice/lib/select2/js/select2.min.js' %}"></script>
+                            <script src="{% static 'frontoffice/lib/fullcalendar/fullcalendar.min.js' %}"></script>
+                            
+                            <!-- Ajout du CSS de Select2 -->
+                            <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+                            <!-- Ajout du JavaScript de Select2 -->
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+                            <script>
+                              $(function(){
+                                'use strict'
+                        
+                                $('#example1').DataTable({
+                                  language: {
+                                    searchPlaceholder: 'Rechercher...',
+                                    sSearch: '',
+                                    lengthMenu: '_MENU_ prestations/page',
+                                  }
+                                });
+                        
+                                $('#example2').DataTable({
+                                  responsive: true,
+                                  language: {
+                                    searchPlaceholder: 'Rechercher...',
+                                    sSearch: '',
+                                    lengthMenu: '_MENU_ prestations/page',
+                                  }
+                                });
+                        
+                                // Select2
+                                $('.dataTables_length select').select2({ minimumResultsForSearch: Infinity });
+                        
+                              });
+                            </script>
+
+                            
+                            
+                            <script>
+                              $(function(){
+                                'use strict'
+                        
+                                // showing modal with effect
+                                $('.modal-effect').on('click', function(e){
+                                  e.preventDefault();
+                                  var effect = $(this).attr('data-effect');
+                                  $('#modaldemo8').addClass(effect);
+                                });
+                        
+                                // hide modal with effect
+                                $('#modaldemo8').on('hidden.bs.modal', function (e) {
+                                  $(this).removeClass (function (index, className) {
+                                      return (className.match (/(^|\s)effect-\S+/g) || []).join(' ');
+                                  });
+                                });
+                        
+                              });
+                            </script>
+                            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+                            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" defer></script>
+                            <script>
+                              document.addEventListener('DOMContentLoaded', () => {
+                                const form = document.getElementById('formRechercheMatricule');
+                                const resultat = document.getElementById('resultat');
+                            
+                                form.addEventListener('submit', function (e) {
+                                    e.preventDefault();
+                                    const matricule = document.getElementById('matricule').value;
+                                    
+                                    if (!matricule) {
+                                        resultat.innerHTML = `<p class="text-danger">Veuillez entrer un matricule.</p>`;
+                                        return;
+                                    }
+                            
+                                    fetch(`/valider-matricule/?matricule=${matricule}`)
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            console.log("✅ Réponse API :", data); // Debugging
+                            
+                                            if (data.status === "success" && data.data.id) {
+                                                if (data.type === "mutualiste") {
+                                                    console.log("🔵 Redirection mutualiste...");
+                                                    window.location.href = `/frontoffice/ajouter-prestations/${data.data.id}`;
+                                                } else if (data.type === "beneficiaire") { 
+                                                    console.log("🟢 Redirection bénéficiaire...");
+                                                    window.location.href = `/frontoffice/ajouter-prestations-beneficiaire/${data.data.id}`;
+                                                }
+                                            } else {
+                                                console.log("❌ Matricule introuvable !");
+                                                resultat.innerHTML = `<p class="text-danger">${data.message || "Matricule non valide."}</p>`;
+                                            }
+                                        })
+                                        .catch(err => {
+                                            console.log("❌ Erreur Fetch :", err);
+                                            resultat.innerHTML = `<p class="text-danger">Une erreur est survenue. Veuillez réessayer.</p>`;
+                                        });
+                                });
+                            });
+                            
+                              
+                            </script>
+                            <script>
+                              document.addEventListener('DOMContentLoaded', () => {
+                                const form = document.getElementById('formRechercheMatriculehospi');
+                                const resultat = document.getElementById('resultathospi');
+                              
+                                form.addEventListener('submit', function (e) {
+                                  e.preventDefault();
+                                  const matricule = document.getElementById('matriculehospi').value;
+                              
+                                  // Appel à l'API pour valider le matricule
+                                  fetch(`/valider-matricule/?matricule=${matricule}`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                      if (data.status === "success" && data.data.id) {
+                                        // Redirection vers une autre page avec l'ID du client
+                                        if (data.type === "mutualiste") {
+                                          console.log("🔵 Redirection mutualiste...");
+                                          window.location.href = `/frontoffice/ajouter-prestationshospi/${data.data.id}`;
+                                        } else if (data.type === "beneficiaire") {
+                                          console.log("🟢 Redirection bénéficiaire...");
+                                          window.location.href = `/frontoffice/ajouter-prestationshospi-beneficiaire/${data.data.id}`;
+                                        }
+                                      } else {
+                                        // Affichage d'un message d'erreur
+                                        resultat.innerHTML = `<p class="text-danger">${data.message || "Matricule non valide ou ID introuvable."}</p>`;
+                                      }
+                                    })
+                                    .catch(err => {
+                                      resultat.innerHTML = `<p class="text-danger">Une erreur est survenue. Veuillez réessayer plus tard.</p>`;
+                                    });
+                                });
+                              });                             
+                            </script>
+                            <script>
+                              document.addEventListener('DOMContentLoaded', () => {
+                                const form = document.getElementById('formRechercheCodedisp');
+                                const resultat = document.getElementById('resultatdisp');
+                            
+                                form.addEventListener('submit', function (e) {
+                                    e.preventDefault();
+                                    const codePrescription = document.getElementById('matriculedisp').value;
+                            
+                                    fetch(`/valider-code_prescription/?code_prescription=${codePrescription}`)
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.status === "success" && data.data.id) {
+                                                
+                                              if (data.type === "mutualiste") {
+                                                  console.log("🔵 Redirection mutualiste...");
+                                                  // Redirection vers la page d'ajout de dispensation avec l'ID de la prescription
+                                                window.location.href = `/frontoffice/ajouter-dispensation/${data.data.id}`;
+                                              } else if (data.type === "beneficiaire") {
+                                                  console.log("🟢 Redirection bénéficiaire...");
+                                                  window.location.href = `/frontoffice/ajouter-dispensation-beneficiaire/${data.data.id}`;
+                                              }
+                                            } else {
+                                                // Affichage d'un message d'erreur si le code n'est pas valide
+                                                resultat.innerHTML = `<p class="text-danger">${data.message || "Code prescription non valide ou ID introuvable."}</p>`;
+                                            }
+                                        })
+                                        .catch(err => {
+                                            resultat.innerHTML = `<p class="text-danger">Une erreur est survenue. Veuillez réessayer plus tard.</p>`;
+                                        });
+                                });
+                            });
+                            
+                            </script>
+                            <script>
+                              document.addEventListener('DOMContentLoaded', () => {
+                                const form = document.getElementById('formRechercheMatriculeoptique');
+                                const resultat = document.getElementById('resultatoptique');
+                              
+                                form.addEventListener('submit', function (e) {
+                                  e.preventDefault();
+                                  const matricule = document.getElementById('matriculeoptique').value;
+                              
+                                  // Appel à l'API pour valider le matricule
+                                  fetch(`/valider-matricule/?matricule=${matricule}`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                      if (data.status === "success" && data.data.id) {
+                                        // Redirection vers une autre page avec l'ID du client
+                                        if (data.type === "mutualiste") {
+                                          console.log("🔵 Redirection mutualiste...");
+                                          window.location.href = `/frontoffice/optique/ajouter-prestations/${data.data.id}`;
+                                        } else if (data.type === "beneficiaire") {
+                                          console.log("🟢 Redirection bénéficiaire...");
+                                          window.location.href = `/frontoffice/optique/ajouter-prestations-beneficiaire/${data.data.id}`;
+                                        }
+                                      } else {
+                                        // Affichage d'un message d'erreur
+                                        resultat.innerHTML = `<p class="text-danger">${data.message || "Matricule non valide ou ID introuvable."}</p>`;
+                                      }
+                                    })
+                                    .catch(err => {
+                                      resultat.innerHTML = `<p class="text-danger">Une erreur est survenue. Veuillez réessayer plus tard.</p>`;
+                                    });
+                                });
+                              });
+                              
+                            </script>
+                            
+                          </body>
+                        </html>
+                        

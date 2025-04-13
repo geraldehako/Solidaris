@@ -1,0 +1,94 @@
+{% extends 'frontoffice/base front.html' %}
+
+{% block content %}
+<div class="az-content pd-y-20 pd-lg-y-30 pd-xl-y-40">
+    <div class="container">
+      <div class="az-content-left az-content-left-components">
+        <div class="component-item">
+          <label>UI Elements</label>
+          <nav class="nav flex-column">
+            <a href="elem-buttons.html" class="nav-link">Buttons</a>
+            <a href="elem-dropdown.html" class="nav-link">Dropdown</a>
+            <a href="elem-icons.html" class="nav-link">Icons</a>
+          </nav>
+          <label>Forms</label>
+          <nav class="nav flex-column">
+            <a href="{% url 'tableau_de_bord' %}" class="nav-link">Form Elements</a>
+          </nav>
+          <label>Charts</label>
+          <nav class="nav flex-column">
+            <a href="{% url 'prise_en_charge' %}" class="nav-link">ChartJS</a>
+          </nav>
+
+          <label>Tables</label>
+          <nav class="nav flex-column">
+            <a href="table-basic.html" class="nav-link active">Basic Tables</a>
+          </nav>
+        </div><!-- component-item -->
+
+        </div><!-- az-content-left -->
+        <div class="az-content-body pd-lg-l-40 d-flex flex-column">
+            <div class="az-content-breadcrumb">
+            <span>Components</span>
+            <span>Tables</span>
+            <span>Basic Tables</span>
+            </div>
+            <h2 class="az-content-title">Basic Tables</h2>
+
+            <div class="az-content-label mg-b-5">Simple Table</div>
+            <p class="mg-b-20">Using the most basic table markup.</p>
+
+            <div class="table-responsive">
+
+                <h1>Détails de la prise en charge</h1>
+
+                <p>Mutualiste : {{ prise_en_charge.mutualiste.nom }} {{ prise_en_charge.mutualiste.prenoms }}</p>
+                <p>Date de prise en charge : {{ prise_en_charge.date_prise_en_charge }}</p>
+                <p>Durée de validité : {{ prise_en_charge.duree_validite }}</p>
+
+                <h2>Prestations associées</h2>
+                <ul>
+                    {% for prestation in prestations %}
+                        <li>
+                            Prestation : {{ prestation.prestation.nom }}<br>
+                            Médecin : {{ prestation.medecin_traitant.nom }}<br>
+                            Montant total : {{ prestation.montant_total }}<br>
+                            Montant pris en charge : {{ prestation.montant_pris_en_charge }}<br>
+                            Montant du tick moderateur : {{ prestation.montant_moderateur }}<br>
+                        </li>
+                    {% endfor %}
+                </ul>
+                        <div class="az-content-label mg-b-5">Striped Rows</div>
+                        <p class="mg-b-20">Add zebra-striping to any table row.</p>
+
+                        <div class="table-responsive">
+                            <table class="table table-striped mg-b-0">
+                            <thead>
+                                <tr>
+                                <th>Prestation</th>
+                                <th>Montant total</th>
+                                <th>Montant pris en charge</th>
+                                <th>Montant du tick moderateur</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for prestation in prestations %}
+                                <tr>
+                                <th scope="row">{{ prestation.prestation.nom }}</th>
+                                <td>{{ prestation.montant_total }}</td>
+                                <td>{{ prestation.montant_pris_en_charge }}</td>
+                                <td>{{ prestation.montant_moderateur }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            </table>
+                        </div><!-- bd -->
+
+                <a href="{% url 'ajouter_prestationsex' id=prise_en_charge.id %}">Ajouter des examens</a>
+                <a href="{% url 'ajouter_prescription' id=prise_en_charge.id %}">Ajouter des prescription</a>
+                <a href="{% url 'prise_en_charge' %}">Retour aux prises en charge</a>
+            </div><!-- row -->
+        </div><!-- az-content-body -->
+    </div>
+</div><!-- az-content -->
+{% endblock content %}

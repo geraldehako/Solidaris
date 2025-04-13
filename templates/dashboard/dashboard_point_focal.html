@@ -1,0 +1,109 @@
+{% extends 'frontoffice/base front.html' %}
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="az-content az-content-profile">
+    <div class="container mn-ht-100p">
+        <div class="content-wrapper w-100">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                        <h2 class="mb-4">Dashboard Point Focal</h2>
+
+                            <!-- Statistiques Globales -->
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="card shadow-lg p-3">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-users fa-3x text-primary"></i>
+                                            <h3 class="mt-2">{{ total_mutualistes }}</h3>
+                                            <p class="text-muted">Mutualistes</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card shadow-lg p-3">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-hand-holding-medical fa-3x text-success"></i>
+                                            <h3 class="mt-2">{{ total_prestations }}</h3>
+                                            <p class="text-muted">Prestations actives</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card shadow-lg p-3">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-money-bill-wave fa-3x text-warning"></i>
+                                            <h3 class="mt-2">{{ total_prestations_montant }} FCFA</h3>
+                                            <p class="text-muted">Montant total prestations</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Statistiques Centres de Santé -->
+                            <div class="row mt-4">
+                                <div class="col-md-4">
+                                    <div class="card shadow-lg p-3">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-prescription-bottle-alt fa-3x text-info"></i>
+                                            <h3 class="mt-2">{{ nombre_pharmacies }}</h3>
+                                            <p class="text-muted">Pharmacies</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card shadow-lg p-3">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-glasses fa-3x text-success"></i>
+                                            <h3 class="mt-2">{{ nombre_lunetteries }}</h3>
+                                            <p class="text-muted">Lunetteries</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card shadow-lg p-3">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-hospital fa-3x text-danger"></i>
+                                            <h3 class="mt-2">{{ nombre_autres }}</h3>
+                                            <p class="text-muted">Centres de sante</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Graphique des prestations -->
+                            <div class="card mt-4 shadow-lg">
+                                <div class="card-header bg-dark text-white">Répartition des Prestations</div>
+                                <div class="card-body">
+                                    <canvas id="chartPrestation"></canvas>
+                                </div>
+                            </div>
+
+                            <!-- Script pour le Graphique -->
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function() {
+                                    var ctx = document.getElementById("chartPrestation").getContext("2d");
+                                    var chart = new Chart(ctx, {
+                                        type: "pie",
+                                        data: {
+                                            labels: [{% for prestation in prestations %}"{{ prestation.nom }}",{% endfor %}],
+                                            datasets: [{
+                                                data: [{% for prestation in prestations %}{{ prestation.montant_total }},{% endfor %}],
+                                                backgroundColor: ["#007bff", "#28a745", "#ffc107", "#dc3545", "#17a2b8"],
+                                            }]
+                                        }
+                                    });
+                                });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- container -->
+    </div><!-- az-content -->
+</div>
+
+{% endblock %}

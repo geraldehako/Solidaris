@@ -1,0 +1,206 @@
+{% extends 'backoffice/base back.html' %}
+
+{% block content %}
+<style>
+.photo-thumbnail {
+    width: 20px;
+    height: 20px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+.table-project-n {
+    color: blue;
+    font-weight: bold;
+}
+</style>
+
+<div class="data-table-area mg-b-15">
+    <div class="container-fluid">
+        <div class="row"> 
+            <div class="col-lg-12">
+                <div class="sparkline13-list">
+                    <div class="sparkline13-hd">
+                        <div class="main-sparkline13-hd">
+                            <h1>Espace du prestataire <span class="table-project-n"> {{ prestations.0.centre_sante }}</span></h1>
+                        </div>
+                        <!-- Boutons d'ajout et d'importation -->
+                        <div class="add-product">
+                            <a href="{% url 'liste_centres_actifs' %}" class="btn btn-success">Retour à la liste</a>
+                        </div>
+                    </div>
+
+                    <!-- Tabs -->
+                    <div class="admintab-wrap edu-tab1 mg-t-30">
+                        <ul class="nav nav-tabs custom-menu-wrap custon-tab-menu-style1">
+                            {% if centre.type != "pharmacie" %}
+                            <li class="active">
+                                <a data-toggle="tab" href="#TabPrestations">
+                                    <span class="edu-icon edu-analytics tab-custon-ic"></span> Les prestations
+                                </a>
+                            </li>
+
+                            
+                            <li>
+                                <a data-toggle="tab" href="#TabActes">
+                                    <span class="edu-icon edu-analytics-arrow tab-custon-ic"></span> Actes médicaux
+                                </a>
+                            </li>
+                            
+
+                            <li>
+                                <a data-toggle="tab" href="#TabHospitations">
+                                    <span class="edu-icon edu-analytics-bridge tab-custon-ic"></span> Hospitalisations
+                                </a>
+                            </li>
+                            {% endif %}
+
+                            {% if centre.type == "pharmacie" %}
+                            <li>
+                                <a data-toggle="tab" href="#TabOrdonnances">
+                                    <span class="edu-icon edu-analytics-arrow tab-custon-ic"></span> Ordonnances
+                                </a>
+                            </li>
+                            {% endif %}
+                            
+                            <li>
+                                <a data-toggle="tab" href="#TabAcces">
+                                    <span class="edu-icon edu-analytics-bridge tab-custon-ic"></span> Accès
+                                </a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <!-- Prestations -->
+                            {% if centre.type != "pharmacie" %}
+                            <div id="TabPrestations" class="tab-pane in active animated flipInX custon-tab-style1">
+                                </br><h3>Détails des prestations</h3> 
+                                <div class="datatable-dashv1-list custom-datatable-overright">
+                                    <table id="table" data-toggle="table" data-pagination="true" data-search="true">
+                                        <thead>
+                                            <tr>
+                                                <th>Prestation</th>
+                                                <th>Tarif Standard</th>
+                                                <th>Disponible</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for prestation in prestations %}
+                                            <tr>
+                                                <td>{{ prestation.prestation }}</td> 
+                                                <td>{{ prestation.tarif_personnalise }}</td>
+                                                <td>{{ prestation.disponible|yesno:"Oui,Non" }}</td>
+                                                <td>
+                                                    <a href="{% url 'prestation_detail' prestation.pk %}" class="btn btn-info btn-xs">Détails</a>
+                                                    <a href="{% url 'prestation_update' prestation.pk %}" class="btn btn-warning btn-xs">Modifier</a>
+                                                    <form method="post" action="{% url 'prestation_delete' prestation.pk %}" style="display: inline;" 
+                                                        onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette prestation ?');">
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="btn btn-danger btn-xs">Supprimer</button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <!-- Actes médicaux -->
+                            {% if centre.type != "pharmacie" %}
+                            <div id="TabActes" class="tab-pane animated flipInX custon-tab-style1">
+                                </br><h3>Actes médicaux</h3>
+                                <div class="datatable-dashv1-list custom-datatable-overright">
+                                    <table id="table" data-toggle="table" data-pagination="true" data-search="true">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Adhérent</th>
+                                                <th>Actes</th>
+                                                <th>Montant Total</th> 
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for acteprestation in acteprestations %}
+                                            <tr>
+                                                <td>{{ acteprestation.date_validation }}</td> 
+                                                <td>{{ acteprestation.prise_en_charge.mutualiste }}</td>
+                                                <td>{{ acteprestation.prestation }}</td> 
+                                                <td>{{ acteprestation.montant_total }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <!-- Ordonnances -->
+                            {% if centre.type == "pharmacie" %}
+                            <div id="TabOrdonnances" class="tab-pane animated flipInX custon-tab-style1">
+                                </br><h3>Ordonnances</h3>
+                                <div class="datatable-dashv1-list custom-datatable-overright">
+                                    <table id="table" data-toggle="table" data-pagination="true" data-search="true">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Nom & Prénoms</th>
+                                                <th>Médicaments</th>
+                                                <th>Montant Total</th>
+                                            </tr>
+                                        </thead> 
+                                        <tbody>
+                                            {% for ordonnance in ordonnances %}
+                                            <tr>
+                                                <td>{{ ordonnance.date_prestation|date:"d/m/Y H:i" }}</td>
+                                                <td>{{ ordonnance.mutualiste.nom }} {{ ordonnance.mutualiste.prenom }}</td>
+                                                <td>{{ ordonnance.medicaments_utilises|default:"Aucune description" }}</td>
+                                                <td>{{ ordonnance.montant_total|default:"0" }} F</td>
+                                            </tr>
+                                            {% empty %}
+                                            <tr>
+                                                <td colspan="4" style="text-align: center;">Aucune ordonnance trouvée</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <!-- Acces -->
+                            <div id="TabAcces" class="tab-pane animated flipInX custon-tab-style1">
+                                </br><h3>Accès</h3>
+                                <div class="datatable-dashv1-list custom-datatable-overright">
+                                    <table id="table" data-toggle="table" data-pagination="true" data-search="true">
+                                        <thead>
+                                            <tr>
+                                                <th>Nom prénoms</th>
+                                                <th>Nom d'utilisateur</th>
+                                                <th>Mot de passe</th>
+                                                <th>Derniere connexion</th> 
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for utilisateur in acces %}
+                                            <tr>
+                                                <td>{{ utilisateur.first_name }} {{ utilisateur.last_name }}</td> 
+                                                <td>{{ utilisateur.username }}</td>
+                                                <td>{{ utilisateur.password }}</td> 
+                                                <td>{{ utilisateur.last_login }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div> <!-- Fin .sparkline13-list -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

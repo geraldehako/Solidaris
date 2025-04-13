@@ -1,0 +1,170 @@
+{% extends 'frontoffice/base front.html' %}
+
+{% block content %}
+<div class="az-content az-content-profile">
+    <div class="container mn-ht-100p">
+        <div class="az-content-left az-content-left-profile"> 
+            <div class="az-profile-overview">
+                <div class="az-img-user">
+                    {% if prescription.prise_en_charge.mutualiste.photo %}
+                        <img src="{{ prescription.prise_en_charge.mutualiste.photo.url }}" alt="Photo du mutualiste">
+                    {% else %}
+                        <img src="/static/images/default-profile.png" alt="Photo par défaut">
+                    {% endif %}
+                </div>
+                <div class="d-flex justify-content-between mg-b-20">
+                    <div>
+                        <h5 class="az-profile-name">{{ prescription.prise_en_charge.mutualiste.nom }} {{ prescription.prise_en_charge.mutualiste.prenom }}</h5>
+                        <p class="az-profile-name-text">{{ prescription.prise_en_charge.mutualiste.age }} Ans</p>
+                        <p class="az-profile-name-text">
+                            {% if prescription.prise_en_charge.mutualiste.sexe == "F" %} Féminin {% else %} Masculin {% endif %}
+                        </p>
+                    </div>                    
+                </div>
+                <div class="az-profile-bio">
+                    <p><strong>Date de prise en charge :</strong> {{ prescription.prise_en_charge.date_prise_en_charge }}</p>
+                    <p><strong>Durée de validité :</strong> {{ prescription.prise_en_charge.duree_validite }}</p>
+                </div>
+                <hr class="mg-y-30">
+                <div class="az-content-label mg-b-10">Statistiques des Prestations</div>
+                {% if prescription.prise_en_charge.mutualiste.statistiques_prestations %}
+                <ul class="list-group wd-md-100p">
+                    {% for key, value in prescription.prise_en_charge.mutualiste.statistiques_prestations.items %}
+                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="media-icon mg-r-15" style="color: #072C84;">
+                                    <i class="fas fa-{{ key }}"></i>
+                                </div>
+                                <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">{{ key|title }}</h6>
+                            </div>
+                            <span class="d-block tx-11 text-muted text-right" style="color: #072C84;">{{ value }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p>Aucune prestation enregistrée.</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="az-content-body az-content-body-profile">
+            <div class="az-profile-body">
+                <form method="POST" action="{% url 'ajouter_dispensation' id=prescription_id %}" id="dispensationForm">
+                    {% csrf_token %}
+                    <input type="hidden" name="prescription_id" value="{{ prescription_id }}">
+                    <input type="hidden" name="mutualiste_id" value="{{ prescription.prise_en_charge.mutualiste.id }}">
+                    <h3>Médicaments prescrits</h3>
+                    <div class="table-responsive">
+                        <table class="table table-striped mg-b-0">
+                            <thead>
+                                <tr>
+                                    <th>Nom du Médicament</th>
+                                    <th class="wd-5p">Quantité</th>
+                                    <th class="wd-10p">Prix</th>
+                                    <th class="wd-15p">Substitution</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for medicament in medicaments %} 
+                                <tr>
+                                    <td>{{ medicament.nom }}</td>
+                                    <td><span>{{ medicament.quantite }}</span></td>
+                                    <td>
+                                        <input type="number" class="form-control prix-input" 
+                                               name="prix_{{ medicament.id }}" 
+                                               placeholder="Saisir le prix" 
+                                               required>
+                                    </td>                                 
+                                    <td>
+                                        <button type="button" class="btn btn-warning btn-sm" onclick="toggleSubstitution({{ medicament.id }})" id="btn_substituer_{{ medicament.id }}">
+                                            Substituer
+                                        </button>
+                                        <select class="form-control select2 mt-2 d-none" name="medicament_substitue_{{ medicament.id }}" id="medicament_substitue_{{ medicament.id }}">
+                                            <option value="">-- Choisir un médicament --</option>
+                                            {% for medicament_sub in medicaments %}
+                                                <option value="{{ medicament_sub.id }}">{{ medicament_sub.nom }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <button type="button" class="btn btn-primary mt-3" id="showConfirmationModal">Valider Dispensation</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmation -->
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Êtes-vous sûr de vouloir valider cette dispensation ?
+            </div>
+            <div class="modal-footer">
+                <!-- Annuler: Retourner à la page précédente -->
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="window.history.back();">Annuler</button>
+                <!-- Valider: Soumettre le formulaire -->
+                <button type="button" class="btn btn-primary" id="confirmDispensation">Valider</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+
+<script>
+    $(document).ready(function () {
+        $(".select2").select2();
+
+        function toggleSubstitution(medicamentId) {
+            let selectField = $("#medicament_substitue_" + medicamentId);
+            let button = $("#btn_substituer_" + medicamentId);
+
+            selectField.toggleClass("d-none").hide().fadeIn();
+            button.toggleClass("btn-warning btn-danger")
+                  .text(selectField.hasClass("d-none") ? "Substituer" : "Annuler");
+
+            if (selectField.hasClass("d-none")) {
+                selectField.val("");
+            }
+        }
+
+        $("#showConfirmationModal").click(function () {
+            let allValid = true;
+            $(".prix-input").each(function () {
+                if ($(this).val().trim() === "") {
+                    allValid = false;
+                    $(this).addClass("is-invalid");
+                } else {
+                    $(this).removeClass("is-invalid");
+                }
+            });
+
+            if (allValid) {
+                $("#confirmationModal").modal("show");
+            } else {
+                alert("Veuillez remplir tous les champs requis.");
+            }
+        });
+
+        $("#confirmDispensation").click(function () {
+            $("#dispensationForm").submit();
+        });
+    });
+</script>
+
+
+{% endblock content %}

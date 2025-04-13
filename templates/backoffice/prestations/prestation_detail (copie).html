@@ -1,0 +1,264 @@
+{% extends 'backoffice/base back.html' %}
+
+{% block content %}
+<style>
+.photo-thumbnail {
+    width: 20px;
+    height: 20px;
+    object-fit: cover; /* Maintient les proportions et évite les distorsions */
+    border-radius: 5px; /* Coins arrondis */
+}
+.table-project-n {
+    color: blue;
+    font-weight: bold;
+}
+</style>
+
+<div class="data-table-area mg-b-15">
+    <div class="container-fluid">
+        <div class="row"> 
+            <div class="col-lg-12">
+                <div class="sparkline13-list">
+                    <!-- Header -->
+                    <div class="sparkline13-hd">
+                        <div class="main-sparkline13-hd">
+                            <h1>Espace du prestataire <span class="table-project-n"> {{ prestations.0.centre_sante }}</span></h1>
+                        </div>
+                    </div>
+
+                    <!-- Tabs -->
+                    <div class="admintab-wrap edu-tab1 mg-t-30">
+                        <ul class="nav nav-tabs custom-menu-wrap custon-tab-menu-style1">
+                            <li class="active">
+                                <a data-toggle="tab" href="#TabPrestations"><span class="edu-icon edu-analytics tab-custon-ic"></span> Les prestations</a>
+                            </li>
+                            <li><a data-toggle="tab" href="#TabActes"><span class="edu-icon edu-analytics-arrow tab-custon-ic"></span> Actes médicaux</a></li>
+                            <li><a data-toggle="tab" href="#TabHospitations"><span class="edu-icon edu-analytics-bridge tab-custon-ic"></span> Hospitalisations</a></li>
+                            <li><a data-toggle="tab" href="#TabOrdonnances"><span class="edu-icon edu-analytics-arrow tab-custon-ic"></span> Ordonnances</a></li>
+                            <li><a data-toggle="tab" href="#TabAcces"><span class="edu-icon edu-analytics-bridge tab-custon-ic"></span> Accès</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <!-- Prestations -->
+                            <div id="TabPrestations" class="tab-pane in active animated flipInX custon-tab-style1">
+                            </br><h3>Détails des prestations</h3> 
+                        
+                                <!-- Boutons d'ajout et d'importation -->
+                                <div class="add-product">
+                                    <a href="{% url 'prestation_create' %}" class="btn btn-success">Ajouter une Prestation</a>
+                                    <a href="{% url 'importer_prestations' %}" class="btn btn-primary">Importer des Prestations</a>
+                                </div>
+                            
+                                <!-- Tableau des prestations -->
+                                <div class="datatable-dashv1-list custom-datatable-overright">
+                                    <div id="toolbar">
+                                        <select class="form-control dt-tb">
+                                            <option value="">Export Basic</option>
+                                            <option value="all">Export All</option>
+                                            <option value="selected">Export Selected</option>
+                                        </select>
+                                    </div>
+                            
+                                    <table id="table" data-toggle="table" data-pagination="true" data-search="true" data-show-columns="true" 
+                                        data-show-pagination-switch="true" data-show-refresh="true" data-key-events="true" 
+                                        data-show-toggle="true" data-resizable="true" data-cookie="true"
+                                        data-cookie-id-table="saveId" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar">
+                                        
+                                        <thead>
+                                            <tr>
+                                                <th data-field="state" data-checkbox="true"></th>
+                                                <th data-field="Catégorie">Prestation</th>
+                                                <th data-field="Tarif" data-editable="true">Tarif Standard</th>
+                                                <th data-field="statut" data-editable="true">disponible</th>
+                                                <th data-field="action">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for prestation in prestations %}
+                                            <tr>
+                                                <td></td>
+                                                <td>{{ prestation.prestation }}</td> 
+                                                <td>{{ prestation.tarif_personnalise }}</td>
+                                                <td>{{ prestation.disponible|yesno:"Oui,Non" }}</td>
+                                                <td>
+                                                    <div class="btn-group btn-custom-groups">
+                                                        <a href="{% url 'prestation_detail' prestation.pk %}" class="btn btn-info btn-xs">
+                                                            <i class="fa fa-eye"></i> Détails
+                                                        </a>
+                                                        <a href="{% url 'prestation_update' prestation.pk %}" class="btn btn-warning btn-xs">
+                                                            <i class="fa fa-pencil"></i> Modifier
+                                                        </a>
+                                                        <form method="post" action="{% url 'prestation_delete' prestation.pk %}" 
+                                                            style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette prestation ?');">
+                                                            {% csrf_token %}
+                                                            <button type="submit" class="btn btn-danger btn-xs">
+                                                                <i class="fa fa-trash"></i> Supprimer
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            
+                                <!-- Lien de retour --> 
+                            </div>
+                        
+
+                            <!-- Actes médicaux -->
+                            <div id="TabActes" class="tab-pane animated flipInX custon-tab-style1">
+                            </br><h3>Actes médicaux</h3>
+                                <!-- Tableau des prestations -->
+                                <div class="datatable-dashv1-list custom-datatable-overright">
+                                    <div id="toolbar">
+                                        <select class="form-control dt-tb">
+                                            <option value="">Export Basic</option>
+                                            <option value="all">Export All</option>
+                                            <option value="selected">Export Selected</option>
+                                        </select>
+                                    </div>
+                            
+                                    <table id="table" data-toggle="table" data-pagination="true" data-search="true" data-show-columns="true" 
+                                        data-show-pagination-switch="true" data-show-refresh="true" data-key-events="true" 
+                                        data-show-toggle="true" data-resizable="true" data-cookie="true"
+                                        data-cookie-id-table="saveId" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar">
+                                        
+                                        <thead>
+                                            <tr>
+                                                <th data-field="state" data-checkbox="true"></th>
+                                                <th data-field="date">Date</th>
+                                                <th data-field="ass" data-editable="true">Adhèrent</th>
+                                                <th data-field="presta" data-editable="true">Actes</th>
+                                                <th data-field="mtttotal">montant total</th>
+                                                <th data-field="mtttotala">montant mutuelle</th>
+                                                <th data-field="mtttotala">montant adh</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for acteprestation in acteprestations %}
+                                            <tr>
+                                                <td></td>
+                                                <td>{{ acteprestation.date_validation }}</td> 
+                                                <td>{{ acteprestation.prise_en_charge.mutualiste }}</td>
+                                                <td>{{ acteprestation.prestation}}</td> 
+                                                <td>{{ acteprestation.montant_total }}</td>
+                                                <td>{{ acteprestation.montant_pris_en_charge }}</td> 
+                                                <td>{{ acteprestation.montant_moderateur }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Hospitalisations -->
+                            <div id="TabHospitations" class="tab-pane animated flipInX custon-tab-style1">
+                            </br><h3>Hospitalisations</h3>
+                                <p>Contenu spécifique aux hospitalisations...</p>
+                            </div>
+
+                            <!-- Ordonnances -->
+                            <div id="TabOrdonnances" class="tab-pane animated flipInX custon-tab-style1">
+                            
+                                <div class="datatable-dashv1-list custom-datatable-overright">
+                                    <div id="toolbar">
+                                        <select class="form-control dt-tb">
+                                            <option value="">Export Basic</option>
+                                            <option value="all">Export All</option>
+                                            <option value="selected">Export Selected</option> 
+                                        </select>
+                                    </div>
+                                    <table id="table" data-toggle="table" data-pagination="true" data-search="true" data-show-columns="true" data-show-pagination-switch="true" data-show-refresh="true" data-key-events="true" data-show-toggle="true" data-resizable="true" data-cookie="true"
+                                        data-cookie-id-table="saveId" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar">
+                                        <thead>
+                                            <tr>
+                                                <th data-field="stat" data-checkbox="true"></th>
+                                                <th data-field="No" data-editable="true">Date</th>
+                                                <th data-field="No" data-editable="true">Nom prénoms</th>
+                                                <th data-field="Nou" data-editable="true">Médicaments</th>
+                                                <th data-field="Mo" data-editable="true">montant_total</th>
+                                                <th data-field="Rôe" data-editable="true">part_mutuelle</th>
+                                                <th data-field="Deniere" data-editable="true">part_mutualiste</th>
+                                                <th data-field="Grupe" data-editable="true">statut_validation_html</th>
+                                            </tr>
+                                        </thead> 
+                                        <tbody>
+                                            {% for ordonnance in ordonnances %}
+                                                <tr>
+                                                    <td></td>
+                                                    <td>{{ ordonnance.date_prestation|date:"d/m/Y H:i" }}</td>
+                                                    <td>{{ ordonnance.mutualiste.nom }} {{ prestation.mutualiste.prenom }}</td>
+                                                    <td>{{ ordonnance.medicaments_utilises|default:"Aucune description" }}</td>
+                                                    <td>{{ ordonnance.montant_total|default:"0" }} F</td>
+                                                    <td>{{ ordonnance.part_mutuelle|default:"0" }} F</td>
+                                                    <td>{{ ordonnance.part_mutualiste|default:"-" }} F</td>
+                                                    <td>{{ ordonnance.statut_validation_html|safe }}</td>
+                                                </tr>
+                                                {% empty %}
+                                                <tr>
+                                                    <td colspan="8" style="text-align: center;">Aucune prestation trouvée</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Accès -->
+                            <div id="TabAcces" class="tab-pane animated flipInX custon-tab-style1">
+                                </br><h3>Accès</h3>
+                                <div class="datatable-dashv1-list custom-datatable-overright">
+                                    <div id="toolbar">
+                                        <select class="form-control dt-tb">
+                                            <option value="">Export Basic</option>
+                                            <option value="all">Export All</option>
+                                            <option value="selected">Export Selected</option> 
+                                        </select>
+                                    </div>
+                                    <table id="table" data-toggle="table" data-pagination="true" data-search="true" data-show-columns="true" data-show-pagination-switch="true" data-show-refresh="true" data-key-events="true" data-show-toggle="true" data-resizable="true" data-cookie="true"
+                                        data-cookie-id-table="saveId" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar">
+                                        <thead>
+                                            <tr>
+                                                <th data-field="state" data-checkbox="true"></th>
+                                                <th data-field="Nom" data-editable="true">Nom prénoms</th>
+                                                <th data-field="Nomu" data-editable="true">Nom d'utilisateur</th>
+                                                <th data-field="Mot" data-editable="true">Mot de passe</th>
+                                                <th data-field="Rôle" data-editable="true">Rôle</th>
+                                                <th data-field="Derniere" data-editable="true">Derniere connexion</th>
+                                                <th data-field="Groupe" data-editable="true">Groupe</th>
+                                                <th data-field="action">Actions</th>
+                                            </tr>
+                                        </thead> 
+                                        <tbody>
+                                            {% for utilisateur in acces %}
+                                            <tr> 
+                                                <td></td>
+                                                <td>{{ utilisateur.first_name }} {{ utilisateur.last_name }}</td>
+                                                <td>{{ utilisateur.username }}</td>
+                                                <td>{{ utilisateur.password }}</td>
+                                                <td>{{ utilisateur.get_role_display }}</td>
+                                                <td>{{ utilisateur.last_login }}</td>
+                                                <td>{{ utilisateur.groupe }}</td>
+                                                <td>
+                                                    <div class="btn-group btn-custom-groups">
+                                                        <a type="button" class="btn btn-warning btn-xs" href="{% url 'modifier_utilisateur' utilisateur.id %}"><i class="fa fa-pencil" aria-hidden="true"></i>   Modifier</a>
+                                                        <a type="button" class="btn btn-danger btn-xs"  href="{% url 'supprimer_utilisateur' utilisateur.id %}"><i class="fa fa-trash" aria-hidden="true"></i>   Supprimer</a>
+                                                        <a type="button" class="btn btn-default btn-xs" href="{% url 'reinitialiser_mot_de_passe' utilisateur.id %}"><i class="fa  fa-refresh" aria-hidden="true"></i>   Réinitialiser le mot de passe</a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- Fin .sparkline13-list -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

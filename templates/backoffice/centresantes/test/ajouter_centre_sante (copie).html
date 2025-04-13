@@ -1,0 +1,55 @@
+{% extends 'backoffice/base back.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>{% if form.instance.pk %}Modifier{% else %}Ajouter{% endif %} un Centre de Santé</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                {{ form.nom.label_tag }}
+                {{ form.nom }}
+                {{ form.type.label_tag }}
+                {{ form.type }}
+                {{ form.adresse.label_tag }}
+                {{ form.adresse }}
+            </div>
+            <div class="col-md-6">
+                {{ form.telephone.label_tag }}
+                {{ form.telephone }}
+                {{ form.email.label_tag }}
+                {{ form.email }}
+                {{ form.groupe.label_tag }}
+                {{ form.groupe }}
+            </div>
+        </div>
+
+        <!-- Recherche et filtrage -->
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <label for="categorie">Filtrer par catégorie</label>
+                <select id="categorie" name="categorie" class="form-control">
+                    <option value="">Toutes les catégories</option>
+                    {% for cat, label in prestations.model.CATEGORIES_PRESTATION %}
+                        <option value="{{ cat }}">{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="recherche">Rechercher une prestation</label>
+                <input id="recherche" name="recherche" class="form-control" type="text" placeholder="Description...">
+            </div>
+        </div>
+
+        <!-- Liste des prestations -->
+        <div class="mt-4">
+            <label>Prestations disponibles</label>
+            <div class="form-group">
+                {{ form.prestations }}
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+    </form>
+</div>
+{% endblock %}

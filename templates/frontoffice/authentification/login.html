@@ -1,0 +1,63 @@
+{% extends 'backoffice/base back login.html' %}
+
+{% block content %}
+<div class="error-pagewrap">
+    <div class="error-page-int">
+        <div class="text-center m-b-md custom-login"> 
+            <h3>VEUILLEZ VOUS CONNECTER À L'APPLICATION</h3>
+            <p>C'est la meilleure application de tous les temps !</p>
+            <div id="message-container">
+            {% if messages %} 
+                <div class="alert alert-danger" role="alert">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            </div>
+        </div>
+        <div class="content-error">
+            <div class="hpanel">
+                <div class="panel-body">
+                    <form method="POST" id="loginForm">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label class="control-label" for="username">Nom d'utilisateur</label>
+                            <input type="text" class="form-control" name="username" id="username" placeholder="Enter your email" required>
+                            <span class="help-block small">Votre nom d'utilisateur unique pour l'application</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="password">Mot de passe</label>
+                            <input type="password" class="form-control" name="password" id="password-addon" placeholder="Enter your password" required>
+                            <span class="help-block small">Votre mot de passe fort</span>
+                        </div>
+                       
+                        
+                        <div class="checkbox login-checkbox">
+                        
+                        </div>
+                        <button type="submit" class="btn btn-success btn-block loginbtn">Se connecter</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="text-center login-footer">
+            <p>Copyright © <span id="year"></span>. Tous droits réservés. Modèle créé par <a href="">GéraldEhako</a></p>
+        </div>
+    </div>   
+</div>
+ <!-- Script pour insérer l'année actuelle -->
+ <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let messageContainer = document.getElementById("message-container");
+        if (messageContainer) {
+            setTimeout(() => {
+                messageContainer.style.display = "none";
+            }, 30000); // 30 secondes
+        }
+    });
+</script>
+{% endblock content %}

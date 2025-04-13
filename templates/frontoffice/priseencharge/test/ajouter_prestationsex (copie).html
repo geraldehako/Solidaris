@@ -1,0 +1,97 @@
+{% extends 'frontoffice/base front.html' %}
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    
+    {% for form in prestation_formset %}
+        {% for field, errors in form.errors.items %}
+            <p style="color: red;">Erreur dans {{ field }}: {{ errors }}</p>
+        {% endfor %}
+    {% endfor %}
+
+    <!-- Choix du Médecin Traitant -->
+    <div class="mb-3">
+        <label for="medecin" class="form-label"><strong>Choisissez un médecin traitant :</strong></label>
+        <select name="medecin" id="medecin" class="form-select" required>
+            <option value="" disabled selected>-- Sélectionnez un médecin --</option>
+            {% for medecin in medecins %}
+            <option value="{{ medecin.id }}">{{ medecin.nom }} {{ medecin.prenom }} - {{ medecin.specialite }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Description clinique -->
+    <div class="mb-3">
+        <label for="description_clinique" class="form-label"><strong>Description clinique :</strong></label>
+        <textarea name="description_clinique" id="description_clinique" class="form-control" rows="3" placeholder="Décrivez les symptômes ou observations cliniques ici..." required></textarea>
+    </div>
+
+    <!-- FormSet des Prestations -->
+    <div class="col-lg-12">
+        <h3>Prestations hospita</h3>
+        {{ prestation_formset.management_form }}
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Prestation</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody id="prestation-body">
+                {% for form in prestation_formset %}
+                <tr class="prestation-form">
+                    <td>
+                        <select name="form-{{ forloop.counter0 }}-prestation" class="form-select" id="prestation">
+                            <option value="" disabled selected>-- Sélectionnez une prestation --</option>
+                            {% for prestation in prestations %}
+                            <option value="{{ prestation.prestation.id }}" {% if form.prestation.value == prestation.prestation.id %} selected {% endif %}>
+                                {{ prestation.prestation.nom }} - {{ prestation.tarif_personnalise }} F CFA
+                            </option>                            
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>{{ form.description }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <button type="button" class="btn btn-success" onclick="addPrestation()">Ajouter une Prestation</button>
+    </div>
+
+    <div class="col-lg-12 text-center">
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+    </div>
+</form>
+
+<script>
+    function addPrestation() {
+        var formsetPrefix = "{{ prestation_formset.prefix }}";
+        var totalForms = document.getElementById("id_" + formsetPrefix + "-TOTAL_FORMS");
+        var tableBody = document.getElementById("prestation-body");
+    
+        if (totalForms && tableBody) {
+            var total = parseInt(totalForms.value);
+            var newForm = "{{ prestation_formset.empty_form.as_table|escapejs }}";
+            newForm = newForm.replace(/__prefix__/g, total);
+            tableBody.insertAdjacentHTML("beforeend", newForm);
+    
+            // Ajouter la liste des prestations à chaque nouveau formulaire ajouté
+            var prestationsOptions = "";
+            {% for prestation in prestations %}
+                prestationsOptions += '<option value="{{ prestation.id }}">{{ prestation.prestation.nom }} - {{ prestation.tarif_personnalise }} F CFA</option>';
+            {% endfor %}
+    
+            var newPrestationSelect = tableBody.querySelectorAll('select[name="form-' + total + '-prestation"]');
+            newPrestationSelect.forEach(function(select) {
+                select.innerHTML = prestationsOptions;
+            });
+    
+            totalForms.value = total + 1;
+        }
+    }
+</script>
+
+{% endblock content %}

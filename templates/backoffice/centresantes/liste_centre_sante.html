@@ -1,0 +1,152 @@
+{% extends 'backoffice/base back.html' %}
+
+{% block content %}
+<style>
+.photo-thumbnail {
+    width: 20px;
+    height: 20px;
+    object-fit: cover; /* Maintient les proportions et évite les distorsions */
+    border-radius: 5px; /* Optionnel, pour des coins arrondis */
+}
+.table-project-n {
+    color: blue; /* Exemple de couleur */
+    font-weight: bold;
+}
+</style> 
+<!-- Static Table Start -->
+<div class="data-table-area mg-b-15">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="sparkline13-list">
+                    <!-- Header Section -->
+                    <div class="sparkline13-hd">
+                        <div class="main-sparkline13-hd">
+                            <h1>Liste du <span class="table-project-n">réseaux de soins</span></h1> 
+                        </div>
+                    </div>
+
+                    <!-- Content Section -->
+                    <div class="sparkline13-graph">
+                        <div class="add-product mb-3">
+                            <a href="{% url 'ajouter_centre_sante' %}" class="btn btn-primary btn-sm">Ajouter un centre</a>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mb-3">
+                            <a href="{% url 'importer_prestationscentre' %}" class="btn btn-success btn-sm">Importer des prestation pour les centres</a>
+                        </div>
+
+                        <div class="d-flex justify-content-between mb-3">
+                            <a href="{% url 'importer_centres_sante' %}" class="btn btn-warning btn-sm">Importer des centres</a>
+                        </div>
+                        
+
+                        <div class="datatable-dashv1-list custom-datatable-overright">
+                            <div id="toolbar">
+                                <select class="form-control dt-tb">
+                                    <option value="">Export Basic</option>
+                                    <option value="all">Export All</option>
+                                    <option value="selected">Export Selected</option>
+                                </select>
+                            </div>
+                            <table id="table" data-toggle="table" data-pagination="true" data-search="true" 
+                                   data-show-columns="true" data-show-pagination-switch="true" data-show-refresh="true" 
+                                   data-key-events="true" data-show-toggle="true" data-resizable="true" 
+                                   data-cookie="true" data-cookie-id-table="saveId" data-show-export="true" 
+                                   data-click-to-select="true" data-toolbar="#toolbar">
+                                <thead>
+                                    <tr>
+                                        <th data-field="state" data-checkbox="true"></th>
+                                        <th data-field="Nom" data-editable="true">Nom</th>
+                                        <th data-field="Type" data-editable="true">Type</th>
+                                        <th data-field="Adresse">Adresse</th>
+                                        <th data-field="Téléphone" data-editable="true">Téléphone</th>
+                                        <th data-field="Email" data-editable="true">Email</th>
+                                        <th data-field="Groupe">Groupe</th>
+                                        <th data-field="Action">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <!-- Liste des centres -->
+                                {% for centre in centres %}
+                                <tr>
+                                    <td></td>
+                                    <td>{{ centre.nom }}</td>
+                                    <td>{{ centre.type }}</td>
+                                    <td>{{ centre.adresse }}</td>
+                                    <td>{{ centre.telephone }}</td>
+                                    <td>{{ centre.email }}</td> 
+                                    <td>{{ centre.groupe }}</td>
+                                    <td>
+                                       
+                                            <div class="btn-group btn-custom-groups">
+                                                <!-- Détails du centre de santé -->
+                                                <a type="button" href="{% url 'prestation_detail' centre.pk %}" class="btn btn-info btn-xs">
+                                                    <i class="fa fa-eye" aria-hidden="true"></i> Détails
+                                                </a>
+                                        
+                                                <!-- Modifier le centre de santé -->
+                                                <a type="button" href="{% url 'modifier_centre_sante' centre.pk %}" class="btn btn-warning btn-xs">
+                                                    <i class="fa fa-pencil" aria-hidden="true"></i> Modifier
+                                                </a>
+                                        
+                                                <!-- Supprimer le centre de santé -->
+                                                
+                                                <a class="btn btn-danger btn-xs" data-toggle="modal" data-target="#deleteModal{{ centre.pk }}">
+                                                    <i class="fa fa-trash" aria-hidden="true"></i> Supprimer
+                                                </a>
+    
+                                                <!-- Modal de confirmation -->
+                                                <div class="modal fade" id="deleteModal{{ centre.pk }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel{{ centre.pk }}" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="deleteModalLabel{{ centre.pk }}">Confirmation de suppression</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body text-center">
+                                                                Êtes-vous sûr de vouloir supprimer ce centre ?
+                                                            </div>
+                                                            <div class="modal-footer d-flex justify-content-center">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                                                <form method="post" action="{% url 'centre_sante_delete' centre.pk %}">
+                                                                    {% csrf_token %}
+                                                                    <button type="submit" class="btn btn-danger">
+                                                                        <i class="fa fa-trash" aria-hidden="true"></i> Confirmer la suppression
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        
+                                                <!-- Activer/Désactiver le centre -->
+                                                <a href="{% url 'toggle_centre_status' centre.pk %}" class="btn {% if centre.statut %}btn-danger{% else %}btn-success{% endif %} btn-xs">
+                                                    {% if centre.statut %}
+                                                        <i class="fa fa-times" aria-hidden="true"></i> Désactiver
+                                                    {% else %}
+                                                        <i class="fa fa-check" aria-hidden="true"></i> Activer
+                                                    {% endif %}
+                                                </a>
+                                            </div>
+                                        
+                                                                           
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="8">Aucun centre de santé trouvé.</td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

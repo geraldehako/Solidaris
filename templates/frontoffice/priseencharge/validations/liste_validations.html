@@ -1,0 +1,100 @@
+{% extends 'frontoffice/base front.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="az-content-title">Liste des demandes en attente</h1></br>
+
+    <div class="az-content-label mg-b-5">Hospitalisations</div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Mutualiste</th>
+                <th>Centre de Santé</th>
+                <th>Date Admission</th>
+                <th>Motif</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for hospi in hospitalisations %}
+            <tr>
+                {% if hospi.beneficiaire %}
+                    <td>{{ hospi.beneficiaire }}</td>
+                {% else %}
+                    <td>{{ hospi.mutualiste }}</td>
+                {% endif %}
+                <td>{{ hospi.centre_sante }}</td>
+                <td>{{ hospi.date_admission }}</td>
+                <td>{{ hospi.motif_hospitalisation }}</td>
+                <td>
+                    <a href="{% url 'valider_hospitalisation' hospi.id %}" class="btn btn-success btn-xs">Détails</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table></br></br>
+
+    <div class="az-content-label mg-b-5">Examens Médicaux</div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Mutualiste</th>
+                <th>Type Examen</th>
+                <th>Date Prescription</th>
+                <th>Centre</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for exam in examens %}
+            <tr>
+                {% if exam.beneficiaire %}
+                    <td>{{ exam.beneficiaire }}</td>
+                {% else %}
+                    <td>{{ exam.mutualiste }}</td>
+                {% endif %}
+                <td>{{ exam.type_examen }}</td>
+                <td>{{ exam.date_prescription }}</td>
+                <td>{{ exam.centre_sante }}</td>
+                <td>
+                    <a href="{% url 'valider_examen' exam.id %}" class="btn btn-success btn-xs">Valider</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table></br></br>
+
+    <div class="az-content-label mg-b-5">Achats de verres et montures</div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Mutualiste</th>
+                <th>Age</th>
+                <th>Type verres et monture</th>
+                <th>Date Prescription</th>
+                <th>Centre</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for optique in optiques %}
+            <tr>
+                {% if optique.beneficiaire %}
+                    <td>{{ optique.beneficiaire }}</td>
+                    <td>{{ optique.beneficiaire.age }}</td>
+                {% else %}
+                    <td>{{ optique.mutualiste }}</td>
+                    <td>{{ optique.mutualiste.age }}</td>
+                {% endif %}
+                <td>{{ optique.prestation }}</td>
+                <td>{{ optique.date_prestation }}</td>
+                <td>{{ optique.centre_sante }}</td>
+                <td>
+                    <a href="{% url 'valider_optique' optique.id %}" class="btn btn-success btn-xs">Valider</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table></br></br>
+</div>
+{% endblock %}

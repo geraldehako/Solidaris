@@ -1,0 +1,32 @@
+{% extends 'backoffice/base back.html' %}
+
+{% block content %}
+<h2>Liste des Ordonnances</h2>
+<a href="{% url 'ordonnance_create' %}" class="btn btn-primary mb-3">Ajouter une ordonnance</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Mutualiste</th>
+            <th>Date d'émission</th>
+            <th>Renouvelable</th>
+            <th>Valide jusqu'au</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ordonnance in ordonnances %}
+        <tr>
+            <td>{{ ordonnance.mutualiste }}</td>
+            <td>{{ ordonnance.date_emission }}</td>
+            <td>{{ ordonnance.renouvelable|yesno:"Oui,Non" }}</td>
+            <td>{{ ordonnance.valide_jusquau|default:"-" }}</td>
+            <td>
+                <a href="{% url 'ordonnance_update' ordonnance.pk %}" class="btn btn-warning btn-sm">Modifier</a>
+                <a href="{% url 'ordonnance_delete' ordonnance.pk %}" class="btn btn-danger btn-sm">Supprimer</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

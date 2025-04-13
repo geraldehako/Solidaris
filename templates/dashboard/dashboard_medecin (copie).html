@@ -1,0 +1,44 @@
+{% extends 'frontoffice/base front.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="az-content-title">📊 Statistiques du Médecin Conseil</h2>
+
+    <div class="row mt-4">
+        <!-- Hospitalisations -->
+        <div class="col-md-4">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-header">🏥 Hospitalisations</div>
+                <div class="card-body">
+                    <p>🟡 En attente : <strong>{{ stats.hospitalisations_en_attente }}</strong></p>
+                    <p>✅ Validées : <strong>{{ stats.hospitalisations_validees }}</strong></p>
+                    <p>❌ Refusées : <strong>{{ stats.hospitalisations_refusees }}</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Examens médicaux -->
+        <div class="col-md-4">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-header">🩺 Examens Médicaux</div>
+                <div class="card-body">
+                    <p>🟡 En attente : <strong>{{ stats.examens_en_attente }}</strong></p>
+                    <p>✅ Validés : <strong>{{ stats.examens_valides }}</strong></p>
+                    <p>❌ Refusés : <strong>{{ stats.examens_refuses }}</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actes optique -->
+        <div class="col-md-4">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-header">🏥 Actes optiques</div>
+                <div class="card-body">
+                    <p>🟡 En attente : <strong>{{ stats.optiques_en_attente }}</strong></p>
+                    <p>✅ Validées : <strong>{{ stats.optiques_validees }}</strong></p>
+                    <p>❌ Refusées : <strong>{{ stats.hoptiques_refusees }}</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

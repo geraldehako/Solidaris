@@ -1,0 +1,78 @@
+{% extends 'frontoffice/base front.html' %}
+
+{% block content %}
+<div class="az-content az-content-profile">
+    <div class="container mn-ht-100p">
+        <div class="az-content-left az-content-left-profile"> 
+            <div class="az-profile-overview">
+                <div class="az-img-user">
+                    <img src="{{ prescription.prise_en_charge.mutualiste.photo.url }}" alt="Photo du mutualiste">
+                </div>
+                <div class="d-flex justify-content-between mg-b-20">
+                    <div>
+                        <h5 class="az-profile-name">{{ prescription.prise_en_charge.mutualiste.nom }} {{ prescription.prise_en_charge.mutualiste.prenom }}</h5>
+                        <p class="az-profile-name-text">{{ prescription.prise_en_charge.mutualiste.age }} Ans</p>
+                        <p class="az-profile-name-text">
+                            {% if prescription.prise_en_charge.mutualiste.sexe == "F" %} Féminin {% else %} Masculin {% endif %}
+                        </p>
+                    </div>                    
+                </div>
+                <div class="az-profile-bio">
+                    <p><strong>Date de prise en charge :</strong> {{ prescription.prise_en_charge.date_prise_en_charge }}</p>
+                    <p><strong>Durée de validité :</strong> {{ prescription.prise_en_charge.duree_validite }}</p>
+                </div>
+                <hr class="mg-y-30">
+                <div class="az-content-label mg-b-10">Statistiques des Prestations</div>
+                <ul class="list-group wd-md-100p">
+                    {% for key, value in prescription.prise_en_charge.mutualiste.statistiques_prestations.items %}
+                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="media-icon mg-r-15" style="color: #072C84;">
+                                    <i class="fas fa-{{ key }}"></i>
+                                </div>
+                                <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">{{ key|title }}</h6>
+                            </div>
+                            <span class="d-block tx-11 text-muted text-right" style="color: #072C84;">{{ value }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="az-content-body az-content-body-profile">
+            <div class="az-profile-body">
+                <form method="POST" action="{% url 'ajouter_dispensation' id=prescription_id %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="prescription_id" value="{{ prescription_id }}">
+                    <input type="hidden" name="mutualiste_id" value="{{ prescription.prise_en_charge.mutualiste.id }}">
+                    <h3>Médicaments prescrits</h3>
+                    <div class="table-responsive">
+                        <table class="table table-striped mg-b-0">
+                            <thead>
+                                <tr>
+                                    <th>Nom du Médicament</th>
+                                    <th class="wd-5p">Quantité</th>
+                                    <th class="wd-10p">Prix</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for medicament in medicaments %}
+                                <tr>
+                                    <td>{{ medicament.nom }}</td>
+                                    <td>
+                                        <input type="number" class="form-control" name="quantite_{{ medicament.id }}" value="{{ medicament.quantite }}" min="0" required>
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control" name="prix_{{ medicament.id }}" value="{{ medicament.prix }}" required>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Ajouter Dispensation</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

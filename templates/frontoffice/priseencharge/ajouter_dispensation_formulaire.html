@@ -1,0 +1,88 @@
+{% extends 'frontoffice/base front.html' %}
+
+{% block content %}
+<div class="az-content az-content-profile">
+    <div class="container mn-ht-100p">
+        <div class="row">
+            <!-- Profil du Mutualiste -->
+            <div class="col-md-4">
+                <div class="card shadow-sm p-3 mb-4">
+                    <div class="text-center">
+                        <img src="{{ prescription.prise_en_charge.mutualiste.photo.url }}" alt="Photo du mutualiste" class="rounded-circle img-fluid mb-3" style="width: 120px; height: 120px;">
+                        <h5 class="font-weight-bold">{{ prescription.prise_en_charge.mutualiste.nom }} {{ prescription.prise_en_charge.mutualiste.prenom }}</h5>
+                        <p class="text-muted">{{ prescription.prise_en_charge.mutualiste.age }} Ans | {% if prescription.prise_en_charge.mutualiste.sexe == "F" %} Féminin {% else %} Masculin {% endif %}</p>
+                    </div>
+                    <hr>
+                    <p><strong>Date de prise en charge :</strong> {{ prescription.prise_en_charge.date_prise_en_charge }}</p>
+                    <p><strong>Durée de validité :</strong> {{ prescription.prise_en_charge.duree_validite }}</p>
+                </div>
+                
+                <!-- Statistiques des Prestations -->
+                <div class="card shadow-sm p-3">
+                    <h6 class="text-primary font-weight-bold">Statistiques des Prestations</h6>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span><i class="fas fa-file-medical text-primary mr-2"></i> Total des Prestations</span>
+                            <span class="text-primary">{{ prescription.prise_en_charge.mutualiste.statistiques_prestations.total_prestations }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span><i class="fas fa-dollar-sign text-primary mr-2"></i> Montant Total</span>
+                            <span class="text-primary">{{ prescription.prise_en_charge.mutualiste.statistiques_prestations.montant_total }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span><i class="fas fa-hand-holding-usd text-primary mr-2"></i> Part Mutuelle</span>
+                            <span class="text-primary">{{ prescription.prise_en_charge.mutualiste.statistiques_prestations.part_mutuelle }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span><i class="fas fa-user text-primary mr-2"></i> Part Mutualiste</span>
+                            <span class="text-primary">{{ prescription.prise_en_charge.mutualiste.statistiques_prestations.part_mutualiste }}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Médicaments prescrits -->
+            <div class="col-md-8">
+                <div class="card shadow-sm p-4">
+                    <h5 class="font-weight-bold text-center mb-4">Médicaments prescrits</h5>
+                    <form method="POST" action="{% url 'ajouter_dispensation' id=prescription_id %}">
+                        {% csrf_token %}
+                        
+                        <input type="hidden" name="prescription_id" value="{{ prescription_id }}">
+                        <input type="hidden" name="mutualiste_id" value="{{ prescription.prise_en_charge.mutualiste.id }}">
+                        
+                        <div class="table-responsive">
+                            <table class="table table-bordered text-center">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>Médicament</th>
+                                        <th>Quantité</th>
+                                        <th>Prix</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for medicament in medicaments %}
+                                    <tr>
+                                        <td>{{ medicament.nom }}</td>
+                                        <td>
+                                            <input type="number" name="quantite_{{ medicament.id }}" class="form-control" value="{{ medicament.quantite }}" min="0" required>
+                                        </td>
+                                        <td>
+                                            <input type="number" name="prix_{{ medicament.id }}" class="form-control" value="{{ medicament.prix }}" required>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="text-center mt-3">
+                            <button type="submit" class="btn btn-primary">Ajouter Dispensation</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

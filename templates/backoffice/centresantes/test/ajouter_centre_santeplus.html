@@ -1,0 +1,101 @@
+{% extends 'backoffice/base back.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Ajouter un Centre de Santé</h1>
+    <form method="post">
+        {% csrf_token %}
+        <!-- Champs principaux -->
+        <div class="form-group">
+            {{ form.nom.label_tag }} {{ form.nom }}
+        </div>
+        <div class="form-group">
+            {{ form.type.label_tag }} {{ form.type }}
+        </div>
+        <div class="form-group">
+            {{ form.adresse.label_tag }} {{ form.adresse }}
+        </div>
+        <div class="form-group">
+            {{ form.telephone.label_tag }} {{ form.telephone }}
+        </div>
+        <div class="form-group">
+            {{ form.email.label_tag }} {{ form.email }} 
+        </div>
+        <div class="form-group">
+            {{ form.groupe.label_tag }} {{ form.groupe }}
+        </div>
+
+        <!-- Filtres pour les prestations -->
+        <div class="form-group">
+            <label for="categorie">Filtrer par Catégorie</label>
+            <select id="categorie" class="form-control">
+                <option value="">Toutes les catégories</option>
+                {% for key, value in prestations %}
+                    <option value="{{ key }}">{{ value }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="recherche">Rechercher une prestation</label>
+            <input type="text" id="recherche" class="form-control" placeholder="Saisir une description">
+        </div>
+        
+        <!-- Table des prestations -->
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Prestation</th>
+                    <th>Choisir</th>
+                    <th>Tarif Personnalisé</th>
+                </tr>
+            </thead>
+            <tbody id="prestations-list">
+                {% for prestation in form.fields.prestations.queryset %}
+                <tr>
+                    <td>{{ prestation.nom }}</td>
+                    <td>
+                        <input type="checkbox" name="prestations" value="{{ prestation.id }}">
+                    </td>
+                    <td>
+                        <input type="text" name="tarifs_personnalises_{{ prestation.id }}" class="form-control" placeholder="Tarif en FCFA">
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <!-- Bouton de soumission -->
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+    </form>
+</div>       
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const categorieFilter = document.getElementById('categorie');
+                const searchInput = document.getElementById('recherche');
+                const prestationsList = document.getElementById('prestations-list');
+        
+                // Fonction pour charger les prestations filtrées
+                function fetchPrestations() {
+                    const categorie = categorieFilter.value;
+                    const recherche = searchInput.value;
+        
+                    fetch(`/filtrer_prestations/?categorie=${categorie}&recherche=${recherche}`, {
+                        method: 'GET',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                        },
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            prestationsList.innerHTML = data.html;
+                        })
+                        .catch(error => console.error('Erreur:', error));
+                }
+        
+                // Attacher les événements
+                categorieFilter.addEventListener('change', fetchPrestations);
+                searchInput.addEventListener('input', fetchPrestations);
+            });
+        </script>
+        
+
+{% endblock %}

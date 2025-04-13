@@ -1,0 +1,111 @@
+{% extends 'frontoffice/base front.html' %}
+
+{% block content %}
+<div class="az-content az-content-profile">
+    <div class="container mn-ht-100p">
+        <div class="az-content-left az-content-left-profile"> 
+            <div class="az-profile-overview">
+                <div class="az-img-user">
+                    <img src="{{ prescription.prise_en_charge.mutualiste.photo.url }}" alt="Photo du mutualiste">
+                </div>
+                <div class="d-flex justify-content-between mg-b-20">
+                    <div>
+                        <h5 class="az-profile-name">{{ prescription.prise_en_charge.mutualiste.nom }} {{ prescription.prise_en_charge.mutualiste.prenom }}</h5>
+                        <p class="az-profile-name-text">{{ prescription.prise_en_charge.mutualiste.age }} Ans</p>
+                        <p class="az-profile-name-text">
+                            {% if prescription.prise_en_charge.mutualiste.sexe == "F" %} Féminin {% else %} Masculin {% endif %}
+                        </p>
+                    </div>                    
+                </div>
+                <div class="az-profile-bio">
+                    <p><strong>Date de prise en charge :</strong> {{ prescription.prise_en_charge.date_prise_en_charge }}</p>
+                    <p><strong>Durée de validité :</strong> {{ prescription.prise_en_charge.duree_validite }}</p>
+                </div>
+                <hr class="mg-y-30">
+                <div class="az-content-label mg-b-10">Statistiques des Prestations</div>
+                <div class="az-profile-social-list">
+                    <ul class="list-group wd-md-100p">
+                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="media-icon mg-r-15" style="color: #072C84;">
+                                    <i class="fas fa-file-medical"></i>
+                                </div>
+                                <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">Total des Prestations</h6>
+                            </div>
+                            <span class="d-block tx-11 text-muted text-right" style="color: #072C84;">
+                                {{ prescription.prise_en_charge.mutualiste.statistiques_prestations.total_prestations }}
+                            </span>
+                        </li>
+
+                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="media-icon mg-r-15" style="color: #072C84;">
+                                    <i class="fas fa-dollar-sign"></i>
+                                </div>
+                                <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">Montant Total</h6>
+                            </div>
+                            <span class="d-block tx-11 text-muted text-right" style="color: #072C84;">
+                                {{ prescription.prise_en_charge.mutualiste.statistiques_prestations.montant_total }}
+                            </span>
+                        </li>
+
+                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="media-icon mg-r-15" style="color: #072C84;">
+                                    <i class="fas fa-hand-holding-usd"></i>
+                                </div>
+                                <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">Part Mutuelle</h6>
+                            </div>
+                            <span class="d-block tx-11 text-muted text-right" style="color: #072C84;">
+                                {{ prescription.prise_en_charge.mutualiste.statistiques_prestations.part_mutuelle }}
+                            </span>
+                        </li>
+
+                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="media-icon mg-r-15" style="color: #072C84;">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">Part Mutualiste</h6>
+                            </div>
+                            <span class="d-block tx-11 text-muted text-right" style="color: #072C84;">
+                                {{ prescription.prise_en_charge.mutualiste.statistiques_prestations.part_mutualiste }}
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+        <div class="az-content-body az-content-body-profile">
+            <div class="az-profile-body">
+                <form method="POST" action="{% url 'ajouter_dispensation' id=prescription_id %}">
+                    {% csrf_token %}
+                    
+                    <label for="prescription_id">ID Prescription :</label>
+                    <input type="text" name="prescription_id" id="prescription_id" value="{{ prescription_id }}" readonly>
+
+                    <label for="mutualiste_id">ID Mutualiste :</label>
+                    <input type="text" name="mutualiste_id" id="mutualiste_id" value="{{ prescription.prise_en_charge.mutualiste.id }}" readonly>
+
+                    <h3>Médicaments prescrits</h3>
+                    <div id="medicaments">
+                        {% for medicament in medicaments %}
+                            <div>
+                                <label for="quantite_{{ medicament.id }}">Quantité pour {{ medicament.nom }} (actuelle : {{ medicament.quantite }}):</label>
+                                <input type="number" name="quantite_{{ medicament.id }}" id="quantite_{{ medicament.id }}" value="{{ medicament.quantite }}" min="0" required>
+
+                                <label for="prix_{{ medicament.id }}">Prix pour {{ medicament.nom }} :</label>
+                                <input type="number" name="prix_{{ medicament.id }}" id="prix_{{ medicament.id }}" value="{{ medicament.prix }}" required>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <button type="submit">Ajouter Dispensation</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

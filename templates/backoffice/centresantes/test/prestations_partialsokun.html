@@ -1,0 +1,10 @@
+{% for prestation in prestations %}
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="prestation-{{ prestation.id }}" name="prestations" value="{{ prestation.id }}">
+        <label for="prestation-{{ prestation.id }}" class="form-check-label">
+            {{ prestation.nom }} - {{ prestation.description }}
+        </label>
+    </div>
+{% empty %}
+    <p>Aucune prestation trouvée.</p>
+{% endfor %}

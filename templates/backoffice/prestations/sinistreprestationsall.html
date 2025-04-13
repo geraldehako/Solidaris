@@ -1,0 +1,105 @@
+{% extends 'backoffice/base back.html' %}
+
+{% block content %}
+<style>
+    .photo-thumbnail {
+        width: 20px;
+        height: 20px;
+        object-fit: cover; /* Maintient les proportions et évite les distorsions */
+        border-radius: 5px; /* Coins arrondis */
+    }
+    .table-project-n {
+        color: blue;
+        font-weight: bold;
+    }
+</style>
+
+<!-- Static Table Start -->
+<div class="data-table-area mg-b-15">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="sparkline13-list">
+                    
+                    <!-- Header Section -->
+                    <div class="sparkline13-hd">
+                        <div class="main-sparkline13-hd">
+                            <h1>Liste des <span class="table-project-n">Prestations</span></h1>
+                        </div>
+                    </div>
+
+                    <!-- Content Section -->
+                    <div class="sparkline13-graph">
+                        
+                        <div class="add-product mb-3">
+                            <a href="{% url 'categorie_ajouter' %}" class="btn btn-primary btn-sm">
+                                + Ajouter une prestation
+                            </a>
+                        </div>
+
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-success">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                        
+                        <div id="toolbar">
+                            <select class="form-control dt-tb">
+                                <option value="">Export Basic</option>
+                                <option value="all">Export All</option>
+                                <option value="selected">Export Selected</option> 
+                            </select>
+                        </div>
+
+                        <table id="table" 
+                            data-toggle="table" 
+                            data-pagination="true" 
+                            data-search="true" 
+                            data-show-columns="true" 
+                            data-show-pagination-switch="true" 
+                            data-show-refresh="true" 
+                            data-key-events="true" 
+                            data-show-toggle="true" 
+                            data-resizable="true" 
+                            data-cookie="true"
+                            data-cookie-id-table="saveId" 
+                            data-show-export="true" 
+                            data-click-to-select="true" 
+                            data-toolbar="#toolbar">
+                            
+                            <thead>
+                                <tr>
+                                    <th data-field="state" data-checkbox="true"></th>
+                                    <th data-field="Categorie">Catégorie</th>
+                                    <th data-field="Description">Description</th>
+                                    <th data-field="Date">Date</th>
+                                    <th data-field="Montant">Montant</th>
+                                </tr>
+                            </thead>
+                            
+                            <tbody>
+                                {% for prestation in prestations %}
+                                    <tr>
+                                        <td></td>
+                                        <td>{{ prestation.categorie }}</td>
+                                        <td>{{ prestation.description|default:"-" }}</td>
+                                        <td>{{ prestation.date_prestation }}</td>
+                                        <td>{{ prestation.montant_total }}</td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="5" class="text-center">Aucune prestation trouvée.</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+                    </div> <!-- Fin sparkline13-graph -->
+
+                </div> <!-- Fin sparkline13-list -->
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

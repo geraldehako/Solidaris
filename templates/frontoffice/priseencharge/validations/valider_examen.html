@@ -1,0 +1,177 @@
+{% extends 'frontoffice/base front.html' %}
+
+{% block content %}
+<div class="az-content az-content-profile">
+    <div class="container mn-ht-100p">
+        <div class="az-content-left az-content-left-profile">
+            <div class="az-profile-overview">
+                <div class="az-img-user">
+                    {% if examen.beneficiaire %}
+                        <img src="{{ examen.beneficiaire.photo.url }}" alt="Photo du beneficiaire">
+                    {% else %}
+                        <img src="{{ examen.mutualiste.photo.url }}" alt="Photo du mutualiste">
+                    {% endif %}
+                </div>
+                <div class="d-flex justify-content-between mg-b-20">
+                    <div class="text-center">
+                        {% if examen.beneficiaire %}
+                            <h5 class="az-profile-name">{{ examen.beneficiaire.nom }} {{ examen.beneficiaire.prenom }}</h5>
+                            <p class="text-muted">{{ examen.beneficiaire.age }} Ans | {% if examen.beneficiaire.sexe == "F" %} Féminin {% else %} Masculin {% endif %}</p>
+                        {% else %}
+                            <h5 class="az-profile-name">{{ examen.mutualiste.nom }} {{ examen.mutualiste.prenom }}</h5>
+                            <p class="text-muted">{{ examen.mutualiste.age }} Ans | {% if examen.mutualiste.sexe == "F" %} Féminin {% else %} Masculin {% endif %}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="az-profile-bio">
+                    <p><strong>Date de prise en charge :</strong> {{ examen.date_prise_en_charge }}</p>
+                    <p><strong>Durée de validité :</strong> {{ examen.duree_validite }}</p>
+                </div>
+                <hr class="mg-y-30">
+                <div class="az-content-label mg-b-10 text-center">Statistiques des Prestations</div>
+                <div class="az-profile-social-list">
+                    <ul class="list-group wd-md-100p">
+                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="media-icon mg-r-15" style="color: #072C84;">
+                                    <i class="fas fa-file-medical"></i>
+                                </div>
+                                <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">Total des Prestations</h6>
+                            </div>
+                            <span class="d-block tx-11 text-muted text-right" style="color: #072C84;">
+                                {% if examen.beneficiaire %}
+                                    {{ examen.beneficiaire.statistiques_prestations.total_prestations }}
+                                {% else %}
+                                    {{ examen.mutualiste.statistiques_prestations.total_prestations }}
+                                {% endif %}
+                            </span>
+                        </li>
+
+                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="media-icon mg-r-15" style="color: #072C84;">
+                                    <i class="fas fa-dollar-sign"></i>
+                                </div>
+                                <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">Montant Total</h6>
+                            </div>
+                            <span class="d-block tx-11 text-muted text-right" style="color: #072C84;">
+                                {% if examen.beneficiaire %}
+                                    {{ examen.beneficiaire.statistiques_prestations.montant_total }}
+                                {% else %}
+                                    {{ examen.mutualiste.statistiques_prestations.montant_total }}
+                                {% endif %}
+                            </span>
+                        </li>
+
+                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="media-icon mg-r-15" style="color: #072C84;">
+                                    <i class="fas fa-hand-holding-usd"></i>
+                                </div>
+                                <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">Part Mutuelle</h6>
+                            </div>
+                            <span class="d-block tx-11 text-muted text-right" style="color: #072C84;">
+                                {% if examen.beneficiaire %}
+                                    {{ examen.beneficiaire.statistiques_prestations.part_mutuelle }}
+                                {% else %}
+                                    {{ examen.mutualiste.statistiques_prestations.part_mutuelle }}
+                                {% endif %}
+                            </span>
+                        </li>
+
+                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="media-icon mg-r-15" style="color: #072C84;">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">Part Mutualiste</h6>
+                            </div>
+                            <span class="d-block tx-11 text-muted text-right" style="color: #072C84;">
+                                {% if examen.beneficiaire %}
+                                    {{ examen.beneficiaire.statistiques_prestations.part_mutualiste }}
+                                {% else %}
+                                    {{ examen.mutualiste.statistiques_prestations.part_mutualiste }}
+                                {% endif %}
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+        <div class="az-content-body az-content-body-profile">
+            <div class="az-profile-body">
+                <h3>Historique des examens médicaux du mutualiste</h3>
+                <table class="table mg-b-0">
+                    <thead>
+                        <tr>
+                            <th>Date Prescription</th>
+                            <th>Type Examen</th>
+                            <th>Centre de Santé</th>
+                            <th>Statut</th>
+                            <th>Résultat</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for examen in examens_precedents %}
+                        <tr>
+                            <td>{{ examen.date_prescription }}</td>
+                            <td>{{ examen.type_examen }}</td>
+                            <td>{{ examen.centre_sante|default:"-" }}</td>
+                            <td>{{ examen.get_statut_display }}</td>
+                            <td>
+                                {% if examen.fichier_resultat %}
+                                    <a href="{{ examen.fichier_resultat.url }}" target="_blank">Voir</a>
+                                {% else %}
+                                    {{ examen.resultat_texte|default:"-" }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5">Aucun examen précédent.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <h2>Validation de l'examen médical</h2>
+                <div class="text-right">
+                    <p><strong>Mutualiste :</strong> {{ examen.mutualiste }}</p>
+                    <p><strong>Type d'examen :</strong> {{ examen.type_examen }}</p>
+                    <p><strong>Centre :</strong> {{ examen.centre_sante }}</p>
+                </div>
+                <!-- Bouton pour ouvrir le modal -->
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#validationModal">
+                    Valider l'examen
+                </button>
+
+                <!-- Modal de validation -->
+                <div class="modal fade" id="validationModal" tabindex="-1" role="dialog" aria-labelledby="validationModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="validationModalLabel">Confirmer la validation</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Êtes-vous sûr de vouloir valider/refuser cet examen ?</p>
+                                <form method="post" id="validationForm">
+                                    {% csrf_token %}
+                                    {{ form.as_p }}
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                <button type="submit" form="validationForm" class="btn btn-primary">Confirmer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Modifier le paiement</h2>
+<form method="post">
+    {% csrf_token %}
+    <label for="id_montant">Montant :</label>
+    {{ form.montant }}
+    <br>
+    <label for="id_mode_paiement">Mode de paiement :</label>
+    {{ form.mode_paiement }}
+    <br>
+    <label for="id_reference">Référence :</label>
+    {{ form.reference }}
+    <br>
+    <button type="submit">Mettre à jour</button>
+</form>
+<a href="{% url 'liste_paiements' paiement.cotisation.id %}">Annuler</a>
+{% endblock %}

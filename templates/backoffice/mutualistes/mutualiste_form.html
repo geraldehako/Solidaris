@@ -1,0 +1,221 @@
+{% extends 'backoffice/base back.html' %}
+
+{% block content %}
+
+<style>
+.table-project-n {
+    color: blue; /* Exemple de couleur */
+    font-weight: bold;
+}
+
+/* Cache les cases à cocher générées par le formset */
+input[type="checkbox"][name$="-DELETE"] {
+    display: none;
+}
+</style>
+
+<!-- Single pro tab review Start-->
+<div class="single-pro-review-area mt-t-30 mg-b-15">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="product-payment-inner-st">
+                    <h1>Formulaire pour {% if mutualiste_form.instance.pk %}modifier un{% else %}enregistrer un{% endif %} <span class="table-project-n"> mutualiste</span></h1>
+                    <br>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            {{ mutualiste_form.nom }}
+                                        </div>
+                                        <div class="form-group">
+                                            {{ mutualiste_form.prenom }}
+                                        </div>
+                                        <div class="form-group">
+                                            {{ mutualiste_form.telephone }}
+                                        </div>
+                                        <div class="form-group alert-up-pd">
+                                            <div class="dz-message needsclick download-custom">
+                                                <i class="fa fa-download edudropnone" aria-hidden="true"></i>
+                                                <h2 class="edudropnone">Déposez une image ici ou cliquez pour télécharger.</h2>
+                                                <p class="edudropnone">
+                                                    <span class="note needsclick">(Ceci est une démonstration. L'image sélectionnée ne sera <strong>pas</strong> réellement téléchargée.)</span>
+                                                </p>
+                                                {{ mutualiste_form.photo }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">                   
+                                        <div class="form-group">
+                                            {{ mutualiste_form.date_naissance }}
+                                        </div>
+                                        <div class="form-group">
+                                            <select name="sexe" id="sexe" class="form-control" required>
+                                                <option value="" disabled selected>-- Sélectionnez un genre --</option>
+                                                {% for value, label in mutualiste_form.sexe.field.choices %}
+                                                    <option value="{{ value }}" {% if mutualiste_form.sexe.value == value %}selected{% endif %}>
+                                                        {{ label }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select> 
+                                        </div>   
+                                        <div class="form-group">
+                                            <select name="regime" id="regime" class="form-control" required>
+                                                <option value="" disabled selected>-- Sélectionnez un regime --</option>
+                                                {% for value, label in mutualiste_form.regime.field.choices %}
+                                                    <option value="{{ value }}" {% if mutualiste_form.regime.value == value %}selected{% endif %}>
+                                                        {{ label }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select> 
+                                        </div> 
+                                        <div class="form-group">
+                                            <select name="groupe" id="groupe" class="form-control" required>
+                                                <option value="" disabled selected>-- Sélectionnez une ville --</option>
+                                                {% for value, label in mutualiste_form.groupe.field.choices %}
+                                                    <option value="{{ value }}" {% if mutualiste_form.groupe.value == value %}selected{% endif %}>
+                                                        {{ label }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select> 
+                                        </div>
+                                        <div class="form-group">
+                                            {{ mutualiste_form.statut.label_tag }}{{ mutualiste_form.statut }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <br><br>
+                                <h3><span class="table-project-n">Ayants droits</span></h3>
+                                {{ formset.management_form }}
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Nom</th>
+                                            <th>Prénom</th>
+                                            <th>Type de Filiation</th>
+                                            <th>Date de Naissance</th>
+                                            <th>Sexe</th>
+                                            <th>Photo</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for form in formset %}
+                                        <tr> 
+                                            <td>{{ form.nom }}</td>
+                                            <td>{{ form.prenom }}</td>
+                                            <td>{{ form.type_filiation }}</td>
+                                            <td>{{ form.date_naissance }}</td>
+                                            <td>{{ form.sexe }}</td>
+                                            <td>{{ form.photo }}</td> 
+                                            <td>
+                                                {{ form.DELETE }} <!-- Masqué avec CSS -->
+                                                <button type="button" class="btn btn-danger delete-row" onclick="removeRow(this)">Supprimer</button>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                <button type="button" class="btn btn-success" onclick="addForm()">Ajouter un bénéficiaire</button>
+                            </div>
+                            
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+                                <button type="submit" class="btn btn-primary waves-effect waves-light">Enregistrer</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+
+<script>
+    function addForm() {
+        const formsetPrefix = "{{ formset.prefix }}";
+        const totalForms = document.getElementById("id_" + formsetPrefix + "-TOTAL_FORMS");
+        const maxForms = document.getElementById("id_" + formsetPrefix + "-MAX_NUM_FORMS");
+        const tableBody = document.querySelector("table tbody");
+
+        if (totalForms && tableBody) {
+            const total = parseInt(totalForms.value);
+            const max = maxForms ? parseInt(maxForms.value) : 1000;
+
+            if (total < max) {
+                let emptyFormHtml = `{{ formset.empty_form.as_p|escapejs }}`;
+                emptyFormHtml = emptyFormHtml.replace(/__prefix__/g, total);
+
+                // Création d'un élément temporaire pour parser le HTML
+                const tempDiv = document.createElement("div");
+                tempDiv.innerHTML = emptyFormHtml;
+
+                // Extraction des champs du formulaire
+                const inputs = tempDiv.querySelectorAll("input, select, textarea");
+
+                // Création d'une nouvelle ligne (<tr>) pour le tableau
+                const newRow = document.createElement("tr");
+                newRow.classList.add("beneficiaire-form");
+
+                // Définition des colonnes (7 colonnes au total)
+                const columnNames = ["nom", "prenom", "type_filiation", "date_naissance", "sexe", "photo"];
+
+                columnNames.forEach(name => {
+                    const cell = document.createElement("td");
+                    const inputField = tempDiv.querySelector(`[name*="${name}"]`);
+                    if (inputField) {
+                        cell.appendChild(inputField);
+                    } else {
+                        cell.innerHTML = "-"; // Pour éviter les colonnes vides
+                    }
+                    newRow.appendChild(cell);
+                });
+
+                // Colonne pour le bouton "Supprimer"
+                const actionCell = document.createElement("td");
+                const deleteBtn = document.createElement("button");
+                deleteBtn.type = "button";
+                deleteBtn.classList.add("btn", "btn-danger", "delete-row");
+                deleteBtn.textContent = "Supprimer";
+                deleteBtn.onclick = function () {
+                    removeRow(this);
+                };
+                actionCell.appendChild(deleteBtn);
+                newRow.appendChild(actionCell);
+
+                // Ajouter la nouvelle ligne au tableau
+                tableBody.appendChild(newRow);
+
+                // Mettre à jour le total des formulaires
+                totalForms.value = total + 1;
+            } else {
+                alert("Vous avez atteint le nombre maximum de bénéficiaires.");
+            }
+        }
+    }
+
+    function removeRow(button) {
+        const row = button.closest("tr");
+        if (row) {
+            const deleteCheckbox = row.querySelector("input[type='checkbox'][name$='-DELETE']");
+            if (deleteCheckbox) {
+                deleteCheckbox.checked = true;
+                row.style.display = "none"; // Masquer la ligne au lieu de la supprimer
+            } else {
+                row.remove();
+                const totalForms = document.getElementById("id_{{ formset.prefix }}-TOTAL_FORMS");
+                if (totalForms) {
+                    totalForms.value = parseInt(totalForms.value) - 1;
+                }
+            }
+        }
+    }
+</script>
+
+
+{% endblock content %}

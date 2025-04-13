@@ -1,0 +1,87 @@
+{% extends 'backoffice/base back.html' %}
+
+{% block content %}
+<style>
+.photo-thumbnail {
+    width: 20px;
+    height: 20px;
+    object-fit: cover; /* Maintient les proportions et évite les distorsions */
+    border-radius: 5px; /* Optionnel, pour des coins arrondis */
+} 
+.table-project-n {
+    color: blue; /* Exemple de couleur */
+    font-weight: bold;
+}
+</style>
+<!-- Static Table Start -->
+<div class="data-table-area mg-b-15">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="sparkline13-list">
+                    <!-- Header Section -->
+                    <div class="sparkline13-hd">
+                        <div class="main-sparkline13-hd">
+                            <h1>Etat des <span class="table-project-n">Cotisations</span> <span class="table-project-n"></span></h1> 
+                        </div>
+                    </div>
+
+                    <!-- Content Section -->
+                    <div class="sparkline13-graph">
+                            <div class="add-product">
+                            </div>
+                            <div>
+                            </div>
+
+                        <div class="datatable-dashv1-list custom-datatable-overright">
+                            <div id="toolbar">
+                                <select class="form-control dt-tb">
+                                    <option value="">Export Basic</option>
+                                    <option value="all">Export All</option>
+                                    <option value="selected">Export Selected</option>
+                                </select>
+                            </div>
+                            <table id="table" data-toggle="table" data-pagination="true" data-search="true" data-show-columns="true" data-show-pagination-switch="true" data-show-refresh="true" data-key-events="true" data-show-toggle="true" data-resizable="true" data-cookie="true"
+                                data-cookie-id-table="saveId" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar">
+                                <thead>
+                                    <tr>
+                                        <th data-field="state" data-checkbox="true"></th>
+                                        <th data-field="Groupe" data-editable="true">Groupe</th>
+                                        <th data-field="Periode" data-editable="true">Periode</th>
+                                        <th data-field="Totala" data-editable="true">Total Adhésion</th>
+                                        <th data-field="Totalc" data-editable="true">Total Cotisation</th>
+                                        <th data-field="Totalg" data-editable="true">Total Général</th>
+                                        <th data-field="Totalgp" data-editable="true">Total Payer</th>
+                                        <th data-field="Totalgr" data-editable="true">Total Restant</th>
+                                        <th data-field="Statut" data-editable="true">Statut</th>
+                                        <th data-field="action">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for cotisation in cotisations %}
+                                    <tr>
+                                        <td></td>
+                                        <td>{{ cotisation.groupe.nom }} {{ cotisation.groupe.description }}</td>
+                                        <td>{{ cotisation.intitule_cotisation }}</td>
+                                        <td>{{ cotisation.total_adhesion }} FCFA</td>
+                                        <td>{{ cotisation.total_cotisation }} FCFA</td>
+                                        <td>{{ cotisation.total_general }} FCFA</td>
+                                        <td>{{ cotisation.total_payer }} FCFA</td>
+                                        <td>{{ cotisation.total_restant }} FCFA</td>
+                                        <td>{{ cotisation.statut }}</td>
+                                        <td>
+                                            <a href="{% url 'liste_paiements' cotisation.id %}">Voir les paiements</a> | 
+                                            <a href="{% url 'ajouter_paiement' cotisation.id %}">Ajouter un paiement</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,104 @@
+{% extends 'backoffice/base back.html' %}
+
+{% block content %}
+<style>
+.photo-thumbnail {
+    width: 20px;
+    height: 20px;
+    object-fit: cover; /* Maintient les proportions et évite les distorsions */
+    border-radius: 5px; /* Optionnel, pour des coins arrondis */
+}
+.table-project-n {
+    color: blue; /* Exemple de couleur */
+    font-weight: bold;
+}
+</style>
+<!-- Static Table Start -->
+<div class="data-table-area mg-b-15">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="sparkline13-list">
+                    <!-- Header Section -->
+                    <div class="sparkline13-hd">
+                        <div class="main-sparkline13-hd">
+                            <h1>Liste des <span class="table-project-n">Mutualistes Actifs</span></h1>
+                        </div>
+                    </div>
+
+                    <!-- Content Section -->
+                    <div class="sparkline13-graph">
+                            <div class="add-product">
+                                <a href="{% url 'mutualiste_create' %}">Ajouter un mutualiste</a>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <a href="{% url 'import_mutualistes' %}" class="btn btn-success btn-sm">Importer des Mutualistes</a>
+                            </div></br>
+
+                        <div class="datatable-dashv1-list custom-datatable-overright">
+                            <div id="toolbar">
+                                <select class="form-control dt-tb">
+                                    <option value="">Export Basic</option>
+                                    <option value="all">Export All</option>
+                                    <option value="selected">Export Selected</option>
+                                </select>
+                            </div>
+                            <table id="table" data-toggle="table" data-pagination="true" data-search="true" data-show-columns="true" data-show-pagination-switch="true" data-show-refresh="true" data-key-events="true" data-show-toggle="true" data-resizable="true" data-cookie="true"
+                                data-cookie-id-table="saveId" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar">
+                                <thead>
+                                    <tr>
+                                        <th data-field="state" data-checkbox="true"></th>
+                                        <th data-field="photo">Photo</th>
+                                        <th data-field="contrat" data-editable="true">N° contrat</th>
+                                        <th data-field="code_matricule" data-editable="true">Matricule</th>
+                                        <th data-field="Nom" data-editable="true">Nom</th>
+                                        <th data-field="Prénoms">Prénoms</th>
+                                        <th data-field="date_naissance" data-editable="true">Date naissance</th>
+                                        <th data-field="sexe" data-editable="true">sexe</th>
+                                        <th data-field="adhesion" data-editable="true">date adhésion</th>
+                                        <th data-field="statut">statut</th>
+                                        <th data-field="action">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for mutualiste in mutualistes %}
+                            
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            
+                                            <img class="message-avatar" src="{{ mutualiste.photo.url }}" alt="{{ mutualiste.numero_contrat }}" class="photo-thumbnail">
+                                        </td>                
+                                        <td>{{ mutualiste.numero_contrat }}</td>
+                                        <td>{{ mutualiste.code_matricule }}</td>
+                                        <td>{{ mutualiste.nom }}</td>
+                                        <td>{{ mutualiste.prenom }}</td>
+                                        <td>{{ mutualiste.date_naissance }}</td> 
+                                        <td>{{ mutualiste.sexe }}</td>
+                                        <td>{{ mutualiste.date_adhesion }}</td>
+                                        <td>
+                                            <a href="{% url 'toggle_mutualiste_status' mutualiste.id %}" 
+                                               class="btn {% if mutualiste.statut %}btn-success btn-xs{% else %}btn-danger btn-xs{% endif %}">
+                                                {% if mutualiste.statut %} Actif {% else %} Inactif {% endif %}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group btn-custom-groups">
+                                                <a type="button" class="btn btn-default btn-xs" href="{% url 'ajouter_beneficiaires' mutualiste.id %}"><i class="fa fa-group" aria-hidden="true"></i>   Ayants droits</a>
+                                                <a type="button" class="btn btn-primary btn-xs" href="{% url 'prestation_create_social' mutualiste.id %}"><i class="fa fa-gift" aria-hidden="true"></i>   Social</a>
+                                                <a type="button" class="btn btn-danger btn-xs" href="{% url 'mutualiste_detail' mutualiste.id %}"><i class="fa fa-folder-open" aria-hidden="true"></i>   Dossier</a>
+                                                <a type="button" class="btn btn-warning btn-xs" href="{% url 'mutualiste_update' mutualiste.id %}"><i class="fa fa-pencil" aria-hidden="true"></i>   Modifier</a>
+                                            </div>
+                                        </td>                                        
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

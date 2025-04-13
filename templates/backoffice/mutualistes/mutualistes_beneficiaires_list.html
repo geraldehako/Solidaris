@@ -1,0 +1,107 @@
+{% extends 'backoffice/base back.html' %}
+
+{% block content %}
+<style>
+.photo-thumbnail {
+    width: 20px;
+    height: 20px;
+    object-fit: cover; /* Maintient les proportions et évite les distorsions */
+    border-radius: 5px; /* Optionnel, pour des coins arrondis */
+}
+.table-project-n {
+    color: blue; /* Exemple de couleur */
+    font-weight: bold;
+}
+</style>
+<!-- Static Table Start -->
+<div class="data-table-area mg-b-15">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="sparkline13-list">
+                    <!-- Header Section -->
+                    <div class="sparkline13-hd">
+                        <div class="main-sparkline13-hd">
+                            <h1>Liste des adhérents et <span class="table-project-n">Ayants droits</span></h1>
+                        </div>
+                    </div>
+ 
+                    <!-- Content Section -->
+                    <div class="sparkline13-graph">                            
+
+                        <div class="datatable-dashv1-list custom-datatable-overright">
+                            <div id="toolbar">
+                                <select class="form-control dt-tb">
+                                    <option value="">Export Basic</option>
+                                    <option value="all">Export All</option>
+                                    <option value="selected">Export Selected</option>
+                                </select>
+                            </div>
+                            <table id="table" data-toggle="table" data-pagination="true" data-search="true" data-show-columns="true" data-show-pagination-switch="true" data-show-refresh="true" data-key-events="true" data-show-toggle="true" data-resizable="true" data-cookie="true"
+                                data-cookie-id-table="saveId" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar">
+                                <thead>
+                                    <tr>
+                                        <th data-field="state" data-checkbox="true"></th>
+                                        <th data-field="Mutualiste" data-editable="true">Mutualiste</th>
+                                        <th data-field="Code" data-editable="true">Code Matricule</th>
+                                        <th data-field="Sexe" data-editable="true">Sexe</th>
+                                        <th data-field="Régime" data-editable="true">Régime</th>
+                                        <th data-field="action">Bénéficiaires</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for mutualiste in mutualistes %}
+                                    <tr>
+                                        <td></td>
+                                        <td>{{ mutualiste.nom }} {{ mutualiste.prenom }}</td>
+                                        <td>{{ mutualiste.code_matricule }}</td>
+                                        <td>{{ mutualiste.get_sexe_display }}</td>
+                                        <td>{{ mutualiste.regime }}</td>
+                                        <td>
+                                            {% if mutualiste.beneficiaires.all %}
+                                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal{{ mutualiste.id }}">
+                                                    Voir les bénéficiaires
+                                                </button>
+                                        
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="modal{{ mutualiste.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Bénéficiaires de {{ mutualiste.nom }} {{ mutualiste.prenom }}</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <ul class="list-group">
+                                                                    {% for beneficiaire in mutualiste.beneficiaires.all %}
+                                                                        <li class="list-group-item">
+                                                                            {{ beneficiaire.nom }} {{ beneficiaire.prenom }} - {{ beneficiaire.get_type_filiation_display }} ({{ beneficiaire.age }} ans)
+                                                                        </li>
+                                                                    {% endfor %}
+                                                                </ul>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% else %}
+                                                <span class="text-muted">Aucun bénéficiaire</span>
+                                            {% endif %}
+                                        </td>
+                                        
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

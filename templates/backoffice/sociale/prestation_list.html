@@ -1,0 +1,84 @@
+{% extends 'backoffice/base back.html' %}
+
+{% block content %}
+<style>
+.photo-thumbnail {
+    width: 20px;
+    height: 20px;
+    object-fit: cover; /* Maintient les proportions et évite les distorsions */
+    border-radius: 5px; /* Optionnel, pour des coins arrondis */
+}
+.table-project-n {
+    color: blue; /* Exemple de couleur */
+    font-weight: bold;
+}
+</style>
+<!-- Static Table Start -->
+<div class="data-table-area mg-b-15">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="sparkline13-list">
+                    <!-- Header Section -->
+                    <div class="sparkline13-hd">
+                        <div class="main-sparkline13-hd">
+                            <h1>Liste des <span class="table-project-n">Prestations</span> <span class="table-project-n">Sociales</span></h1>
+                        </div>
+                    </div>
+
+                    <!-- Content Section -->
+                    <div class="sparkline13-graph">
+                        <h4></h4>
+                            <div class="add-product">
+                                
+                            </div></br>
+
+                        <div class="datatable-dashv1-list custom-datatable-overright">
+                            <div id="toolbar">
+                                <select class="form-control dt-tb">
+                                    <option value="">Export Basic</option>
+                                    <option value="all">Export All</option>
+                                    <option value="selected">Export Selected</option>
+                                </select>
+                            </div>
+                            <table id="table" data-toggle="table" data-pagination="true" data-search="true" data-show-columns="true" data-show-pagination-switch="true" data-show-refresh="true" data-key-events="true" data-show-toggle="true" data-resizable="true" data-cookie="true"
+                                data-cookie-id-table="saveId" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar">
+                                <thead>
+                                    <tr>
+                                        <th data-field="state" data-checkbox="true"></th>
+                                        <th data-field="Mutualiste" data-editable="true">Mutualiste</th>
+                                        <th data-field="Nature" data-editable="true">Nature de la Prestation</th>
+                                        <th data-field="Montant" data-editable="true">Montant</th>
+                                        <th data-field="État" data-editable="true">État</th>
+                                        <th data-field="Date" data-editable="true">Date de Soumission</th>
+                                        <th data-field="action" width=10px>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for prestation in prestations %}
+                                    <tr>
+                                        <td></td>
+                                        <td>{{ prestation.mutualiste.nom }} {{ prestation.mutualiste.prenoms }}</td>
+                                        <td>{{ prestation.prestation_sociale.nature }}</td>
+                                        <td>{{ prestation.prestation_sociale.montant }} FCFA</td>
+                                        <td>{{ prestation.get_etat_display }}</td>
+                                        <td>{{ prestation.date_soumission }}</td>
+                                        <td>                                           
+                                            <div class="btn-group btn-custom-groups">
+                                                <a type="button" class="btn btn-warning btn-xs" href="{% url 'prestation_update_social' prestation.id %}"><i class="fa fa-pencil" aria-hidden="true"></i>   Modifier</a>
+                                                <a type="button" class="btn btn-danger btn-xs" href="{% url 'prestation_delete_social' prestation.id %}"><i class="fa fa-trash" aria-hidden="true"></i>   Supprimer</a>
+                                                <a type="button" class="btn btn-primary btn-xs" href="{% url 'prestation_sociale_traiter' prestation.id %}"><i class="fa fa-gift" aria-hidden="true"></i>   Traiter</a>
+                                            </div>
+                                        </td>                                        
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

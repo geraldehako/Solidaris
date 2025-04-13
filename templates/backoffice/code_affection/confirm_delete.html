@@ -1,0 +1,12 @@
+{% extends 'backoffice/base back.html' %}
+
+{% block content %}
+<h2>Confirmer la suppression</h2>
+<p>Êtes-vous sûr de vouloir supprimer le code d'affection "{{ code.nom }}" ({{ code.code }}) ?</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Supprimer</button>
+    <a href="{% url 'code_affection_list' %}" class="btn btn-secondary">Annuler</a>
+</form>
+{% endblock %}

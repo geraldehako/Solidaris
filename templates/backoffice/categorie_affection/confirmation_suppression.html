@@ -1,0 +1,40 @@
+{% extends 'backoffice/base back.html' %}
+
+{% block content %}
+<style>
+.photo-thumbnail {
+    width: 20px;
+    height: 20px;
+    object-fit: cover; /* Maintient les proportions et évite les distorsions */
+    border-radius: 5px; /* Optionnel, pour des coins arrondis */
+}
+.table-project-n {
+    color: blue; /* Exemple de couleur */
+    font-weight: bold;
+}
+</style> 
+<div class="single-pro-review-area mt-t-30 mg-b-15">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="product-payment-inner-st">
+        
+                    <h2>Confirmer la suppression</h2>
+                    <p>Voulez-vous vraiment supprimer la catégorie <span class="table-project-n"> <strong>{{ categorie.nom }}</strong> ?</span></p>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+                                <div class="btn-group btn-custom-groups">
+                                    <button type="submit" class="btn btn-danger"><i class="fa fa-check-circle" aria-hidden="true"></i>   Confirmer</button>
+                                    <a type="button" class="btn btn-primary" href="{% url 'categorie_liste'%}"><i class="fa fa-reply-all" aria-hidden="true"></i>   Retour à la liste</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

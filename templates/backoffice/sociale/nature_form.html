@@ -1,0 +1,75 @@
+{% extends 'backoffice/base back.html' %}
+{% block content %}
+<style>
+    .photo-thumbnail {
+        width: 20px;
+        height: 20px;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+    .table-project-n {
+        color: blue;
+        font-weight: bold;
+    }
+</style>
+
+<!-- Static Table Start -->
+<div class="data-table-area mg-b-15">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
+                <div class="sparkline13-list">
+                    <!-- Header Section -->
+                    <div class="sparkline13-hd">
+                        <div class="main-sparkline13-hd">
+                            <h1>{% if form.instance.pk %}Modifier{% else %}Ajouter{% endif %} une nature de <span class="table-project-n"> Prestation Sociale</span></h1>
+                        </div>
+                    </div>
+                        </br>
+                    <!-- Affichage des erreurs -->
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <ul>
+                                {% for field, errors in form.errors.items %}
+                                    {% for error in errors %}
+                                        <li>{{ field|title }} : {{ error }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            {{ form.nature }}
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">  
+                                        <div class="form-group">
+                                            {{ form.montant }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                        
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+                                <div class="btn-group btn-custom-groups">
+                                    <button type="submit" class="btn btn-success"><i class="fa fa-check-circle" aria-hidden="true"></i>   Enregistrer</button>
+                                    <a type="button" class="btn btn-primary" href="{% url 'nature_list'%}"><i class="fa fa-reply-all" aria-hidden="true"></i>   Annuler</a>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </form>
+                </div> <!-- Fin sparkline13-list -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

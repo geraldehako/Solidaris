@@ -1,0 +1,78 @@
+{% extends 'backoffice/base back.html' %}
+
+{% block content %}
+<style>
+.photo-thumbnail {
+    width: 20px;
+    height: 20px;
+    object-fit: cover; /* Maintient les proportions et évite les distorsions */
+    border-radius: 5px; /* Optionnel, pour des coins arrondis */
+}
+.table-project-n {
+    color: blue; /* Exemple de couleur */
+    font-weight: bold;
+} 
+</style>
+<!-- Static Table Start -->
+<div class="data-table-area mg-b-15">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="sparkline13-list">
+                    <!-- Header Section -->
+                    <div class="sparkline13-hd">
+                        <div class="main-sparkline13-hd">
+                            <h1>
+                                {% if form.instance.pk %}Formulaire de traitement de la{% else %}Formulaire d'enregistrement de la{% endif %}
+                                <span class="table-project-n">Prestation Sociale</span> pour l'adhérent 
+                                <span class="table-project-n">{{ mutualiste.nom }} {{ mutualiste.prenom }}</span>
+                            </h1>                            
+                        </div>
+                    </div></br>
+
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        <label for="etat"><strong>État :</strong></label>
+                                        <select name="etat" id="etat" class="form-control" required>
+                                            <option value="" disabled selected>-- Sélectionnez un état --</option>
+                                            {% for value, label in form.etat.field.choices %}
+                                                <option value="{{ value }}" {% if form.etat.value == value %}selected{% endif %}>
+                                                    {{ label }}
+                                                </option>
+                                            {% endfor %}
+                                        </select> 
+                                    </div>                                    
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        <label>Date de Validation/refus</label>
+                                        {{ form.date_validation }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+                                    <div class="btn-group btn-custom-groups">
+                                        <button type="submit" class="btn btn-success"><i class="fa fa-check-circle" aria-hidden="true"></i>   Enregistrer</button>
+                                        <a type="button" class="btn btn-primary" href="{% url 'prestation_sociale_list'%}"><i class="fa fa-reply-all" aria-hidden="true"></i>   Annuler</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        $('.select2').select2();
+    });
+</script>
+
+{% endblock content %}

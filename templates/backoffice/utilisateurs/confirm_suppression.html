@@ -1,0 +1,10 @@
+{% extends 'backoffice/base back.html' %}
+{% block content %}
+<h2>Confirmer la suppression</h2>
+<p>Voulez-vous vraiment supprimer {{ utilisateur.username }} ?</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Oui, supprimer</button>
+    <a href="{% url 'liste_utilisateurs' %}">Annuler</a>
+</form>
+{% endblock %}

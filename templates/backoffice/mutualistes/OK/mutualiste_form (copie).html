@@ -1,0 +1,98 @@
+{% extends 'backoffice/base back.html' %}
+
+{% block content %}
+<h1>{% if mutualiste_form.instance.pk %}Modifier{% else %}Créer{% endif %} Mutualiste</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+   
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="form-group">
+            {{ mutualiste_form.nom}}
+        </div>
+        <div class="form-group">
+            {{ mutualiste_form.prenom }}
+        </div>
+        <div class="form-group alert-up-pd">
+            <div class="dz-message needsclick download-custom">
+                <i class="fa fa-download edudropnone" aria-hidden="true"></i>
+                <h2 class="edudropnone">Drop image here or click to upload.</h2>
+                <p class="edudropnone"><span class="note needsclick">(This is just a demo dropzone. Selected image is <strong>not</strong> actually uploaded.)</span>
+                </p>
+                {{ mutualiste_form.photo}}
+            </div>
+        </div>
+        
+        <div class="form-group">
+            {{ mutualiste_form.date_naissance }}
+        </div>
+        <div class="form-group">
+            {{ mutualiste_form.sexe }}
+        </div>
+        <div class="form-group">
+            {{ mutualiste_form.regime }}
+        </div>
+        <div class="form-group">
+            {{ mutualiste_form.statut}}
+        </div>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <h3>Bénéficiaires</h3>
+        {{ formset.management_form }}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Type de Filiation</th>
+                    <th>Date de Naissance</th>
+                    <th>Sexe</th>
+                    <th>Photo</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for form in formset %}
+                <tr>
+                    <td>{{ form.nom }}</td>
+                    <td>{{ form.prenom}}</td>
+                    <td>{{ form.type_filiation }}</td>
+                    <td>{{ form.date_naissance }}</td>
+                    <td>{{ form.sexe}}</td>
+                    <td>{{ form.photo}}</td>
+                    <td>
+                        {% if form.instance.pk %}
+                        <input type="checkbox" name="{{ form.DELETE.html_name }}" class="form-check-input">
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="button" class="btn btn-success" onclick="addForm()">Ajouter un bénéficiaire</button>
+    </div>
+    <button type="submit" class="btn btn-primary waves-effect waves-light">Enregistrer</button>
+</form>
+
+<script>
+    function addForm() {
+        const formsetPrefix = "{{ formset.prefix }}";
+        const totalForms = document.getElementById("id_" + formsetPrefix + "-TOTAL_FORMS");
+        const maxForms = document.getElementById("id_" + formsetPrefix + "-MAX_NUM_FORMS");
+        const tableBody = document.querySelector("table tbody");
+
+        if (totalForms && maxForms && tableBody) {
+            const total = parseInt(totalForms.value);
+            const max = parseInt(maxForms.value);
+
+            if (total < max || max === 1000) {  // 1000 is default if no max is set
+                const emptyForm = "{{ formset.empty_form.as_table|escapejs }}";
+                const newForm = emptyForm.replace(/__prefix__/g, total);
+                tableBody.insertAdjacentHTML("beforeend", newForm);
+                totalForms.value = total + 1;
+            } else {
+                alert("Vous avez atteint le nombre maximum de formulaires.");
+            }
+        }
+    }
+</script>
+{% endblock content %}

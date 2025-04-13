@@ -1,0 +1,10 @@
+{% extends 'backoffice/base back.html' %}
+{% block content %}
+<h2>Réinitialiser le mot de passe pour {{ utilisateur.username }}</h2>
+<form method="post">
+    {% csrf_token %}
+    <label>Nouveau mot de passe :</label>
+    <input type="password" name="nouveau_mot_de_passe" required>
+    <button type="submit">Modifier</button>
+</form>
+{% endblock %}

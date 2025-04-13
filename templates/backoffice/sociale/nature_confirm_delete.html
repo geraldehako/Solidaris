@@ -1,0 +1,48 @@
+{% extends 'backoffice/base back.html' %}
+
+{% block content %}
+<style>
+    .photo-thumbnail {
+        width: 20px;
+        height: 20px;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+    .table-project-n {
+        color: blue;
+        font-weight: bold;
+    }
+</style>
+
+<!-- Static Table Start -->
+<div class="data-table-area mg-b-15">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
+                <div class="sparkline13-list">
+                    <!-- Header Section -->
+                    <div class="sparkline13-hd">
+                        <div class="main-sparkline13-hd">
+                            <h1>Supprimer la Nature de Prestation</h1>
+                        </div>
+                    </div>
+                        </br>
+
+                    <p>Êtes-vous sûr de vouloir supprimer <span class="table-project-n">"{{ nature.nature }}"</span> ?</p>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+                                <div class="btn-group btn-custom-groups">
+                                    <button type="submit" class="btn btn-success"><i class="fa fa-check-circle" aria-hidden="true"></i>   Supprimer</button>
+                                    <a type="button" class="btn btn-primary" href="{% url 'nature_list'%}"><i class="fa fa-reply-all" aria-hidden="true"></i>   Annuler</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

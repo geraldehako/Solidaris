@@ -1,0 +1,10 @@
+{% extends 'backoffice/base back.html' %}
+{% block content %}
+<h2>Supprimer la Prestation Sociale</h2>
+<p>Êtes-vous sûr de vouloir supprimer cette prestation pour {{ prestation.mutualiste.nom }} {{ prestation.mutualiste.prenoms }} ?</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Supprimer</button>
+    <a href="{% url 'prestation_list' %}" class="btn btn-secondary">Annuler</a>
+</form>
+{% endblock %}

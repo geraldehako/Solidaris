@@ -1,0 +1,111 @@
+{% extends 'backoffice/base back.html' %}
+
+{% block content %}
+<style>
+.photo-thumbnail {
+    width: 20px;
+    height: 20px;
+    object-fit: cover; /* Maintient les proportions et évite les distorsions */
+    border-radius: 5px; /* Coins arrondis */
+}
+.table-project-n {
+    color: blue;
+    font-weight: bold;
+}
+</style>
+
+<!-- Static Table Start -->
+<div class="data-table-area mg-b-15">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="sparkline13-list">
+                    
+                    <!-- Header Section -->
+                    <div class="sparkline13-hd">
+                        <div class="main-sparkline13-hd">
+                            <h1>Liste des <span class="table-project-n">Catégories d'Affection</span></h1> 
+                        </div>
+                    </div>
+
+                    <!-- Content Section -->
+                    <div class="sparkline13-graph">
+                        
+                        <div class="add-product mb-3">
+                            <a href="{% url 'categorie_ajouter' %}" class="btn btn-primary btn-sm">
+                                + Ajouter une catégorie
+                            </a>
+                        </div>
+
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-success">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                        
+                        <div id="toolbar">
+                            <select class="form-control dt-tb">
+                                <option value="">Export Basic</option>
+                                <option value="all">Export All</option>
+                                <option value="selected">Export Selected</option> 
+                            </select>
+                        </div>
+
+                        <table id="table" 
+                            data-toggle="table" 
+                            data-pagination="true" 
+                            data-search="true" 
+                            data-show-columns="true" 
+                            data-show-pagination-switch="true" 
+                            data-show-refresh="true" 
+                            data-key-events="true" 
+                            data-show-toggle="true" 
+                            data-resizable="true" 
+                            data-cookie="true"
+                            data-cookie-id-table="saveId" 
+                            data-show-export="true" 
+                            data-click-to-select="true" 
+                            data-toolbar="#toolbar">
+                            
+                            <thead>
+                                <tr>
+                                    <th data-field="state" data-checkbox="true"></th>
+                                    <th data-field="Nom">Nom</th>
+                                    <th data-field="Description">Description</th>
+                                    <th data-field="Action">Actions</th>
+                                </tr>
+                            </thead>
+                            
+                            <tbody> 
+                                {% for categorie in categories %}
+                                    <tr>
+                                        <td></td>
+                                        <td>{{ categorie.nom }}</td>
+                                        <td>{{ categorie.description|default:"-" }}</td>
+                                        <td>
+                                            <div class="btn-group btn-custom-groups">
+                                                <a href="{% url 'categorie_modifier' categorie.pk %}" class="btn btn-warning btn-xs">
+                                                    <i class="fa fa-pencil" aria-hidden="true"></i> Modifier
+                                                </a>
+                                                <a href="{% url 'categorie_supprimer' categorie.pk %}" class="btn btn-danger btn-xs" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?');">
+                                                    <i class="fa fa-trash" aria-hidden="true"></i> Supprimer
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="4" class="text-center">Aucune catégorie trouvée.</td>
+                                    </tr>
+                                {% endfor %} 
+                            </tbody>
+
+                        </table>
+                    </div> <!-- Fin sparkline13-graph -->
+
+                </div> <!-- Fin sparkline13-list -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
